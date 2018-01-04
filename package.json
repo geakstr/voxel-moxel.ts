@@ -1,0 +1,10 @@
+{
+  "name": "voxel-moxel.js",
+  "version": "0.1.0",
+  "description": "just for fun voxel game like minecraft written on js",
+  "main": "src/index.js",
+  "repository": "https://github.com/geakstr/voxel-moxel.js",
+  "author": "geakstr <geakstr@me.com>",
+  "license": "MIT",
+  "private": false
+}
