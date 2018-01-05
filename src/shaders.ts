@@ -1,9 +1,72 @@
-export const getUniform = (name: keyof Uniforms) => uniforms[name];
-export const getAttrib = (name: keyof Attribs) => attribs[name];
+import * as is from "is";
 
-export const createShader = (gl: WebGLRenderingContext) => {
-  const fragmentShader = compileShader(gl, "shader-fs");
-  const vertexShader = compileShader(gl, "shader-vs");
+export const getUniform = (name: UNIFORM) => uniforms[name];
+export const getAttr = (name: ATTR) => attrs[name];
+export const hasAttr = (name: ATTR) => is.number(attrs[name]);
+
+export enum ATTR {
+  POSITION = "a_pos",
+  TEX_COORD = "a_tex_coord",
+  TEX_OFFSET = "a_tex_offset",
+  COLOR = "a_color"
+}
+
+export enum UNIFORM {
+  MVP_MATRIX = "u_mvp_matrix",
+  SAMPLER = "u_sampler"
+}
+
+export enum IN_OUT {
+  VERTEX_POSITION = "v_pos",
+  TEX_COORD = "v_tex_coord",
+  TEX_OFFSET = "v_tex_offset",
+  COLOR = "v_color"
+}
+
+const VERTEX_SHADER = `
+#version 300 es
+
+in vec3 ${ATTR.POSITION};
+in vec2 ${ATTR.TEX_COORD};
+in vec2 ${ATTR.TEX_OFFSET};
+
+uniform mat4 ${UNIFORM.MVP_MATRIX};
+
+out vec3 ${IN_OUT.VERTEX_POSITION};
+out vec2 ${IN_OUT.TEX_COORD};
+out vec2 ${IN_OUT.TEX_OFFSET};
+
+void main(void) {  
+  ${IN_OUT.VERTEX_POSITION} = ${ATTR.POSITION};
+  ${IN_OUT.TEX_COORD} = ${ATTR.TEX_COORD};
+  ${IN_OUT.TEX_OFFSET} = ${ATTR.TEX_OFFSET};
+
+  gl_Position = ${UNIFORM.MVP_MATRIX} * vec4(${ATTR.POSITION}, 1.0);
+}
+`.trim();
+
+// prettier-ignore
+const FRAGMENT_SHADER = `
+#version 300 es
+
+precision mediump float;
+
+in vec3 ${IN_OUT.VERTEX_POSITION};
+in vec2 ${IN_OUT.TEX_COORD};
+in vec2 ${IN_OUT.TEX_OFFSET};
+
+uniform sampler2D ${UNIFORM.SAMPLER};
+
+out vec4 FragColor;
+
+void main(void) {  
+  FragColor = texture(${UNIFORM.SAMPLER}, vec2(${IN_OUT.TEX_COORD}.s, ${IN_OUT.TEX_COORD}.t));
+}
+`.trim();
+
+export const createShader = (gl: WebGL2RenderingContext) => {
+  const fragmentShader = compileShader(gl, gl.FRAGMENT_SHADER, FRAGMENT_SHADER);
+  const vertexShader = compileShader(gl, gl.VERTEX_SHADER, VERTEX_SHADER);
 
   const shader = gl.createProgram();
   if (!shader) {
@@ -18,92 +81,49 @@ export const createShader = (gl: WebGLRenderingContext) => {
   }
   gl.useProgram(shader);
 
-  attribs.vertexPosition = attrib(gl, shader, "aVertexPosition");
-  attribs.textureCoord = attrib(gl, shader, "aTextureCoord");
-  // attribs.vertexNormal = attrib(gl, shader, "aVertexNormal");
+  attr(gl, shader, ATTR.POSITION);
+  attr(gl, shader, ATTR.TEX_COORD);
+  // attr(gl, shader, ATTR.TEX_OFFSET);
+  // attr(gl, shader, ATTR.COLOR);
 
-  uniforms.mvpMatrix = uniform(gl, shader, "uMVPMatrix");
-  // uniforms.nMatrix = uniform(gl, shader, "uNMatrix");
-  uniforms.sampler = uniform(gl, shader, "uSampler");
-  // uniforms.useLighting = uniform(gl, shader, "uUseLighting");
-  // uniforms.ambientColor = uniform(gl, shader, "uAmbientColor");
-  // uniforms.lightingDirection = uniform(gl, shader, "uLightingDirection");
-  // uniforms.directionalColor = uniform(gl, shader, "uDirectionalColor");
+  uniform(gl, shader, UNIFORM.MVP_MATRIX);
+  uniform(gl, shader, UNIFORM.SAMPLER);
 
   return shader;
 };
 
-interface Uniforms {
-  mvpMatrix: WebGLUniformLocation;
-  nMatrix: WebGLUniformLocation;
-  sampler: WebGLUniformLocation;
-  useLighting: WebGLUniformLocation;
-  ambientColor: WebGLUniformLocation;
-  lightingDirection: WebGLUniformLocation;
-  directionalColor: WebGLUniformLocation;
-}
+const uniforms = {} as { [key: string]: WebGLUniformLocation };
+const attrs = {} as { [key: string]: number };
 
-interface Attribs {
-  vertexPosition: number;
-  vertexNormal: number;
-  textureCoord: number;
-}
-
-const uniforms = {} as Uniforms;
-const attribs = {} as Attribs;
-
-const attrib = (
-  gl: WebGLRenderingContext,
-  shader: WebGLProgram,
-  attribName: string
-) => {
-  const attribLocation = gl.getAttribLocation(shader, attribName);
-  gl.enableVertexAttribArray(attribLocation);
+const attr = (gl: WebGL2RenderingContext, shader: WebGLProgram, name: ATTR) => {
+  const attribLocation = gl.getAttribLocation(shader, name);
+  attrs[name] = attribLocation;
   return attribLocation;
 };
 
 const uniform = (
-  gl: WebGLRenderingContext,
+  gl: WebGL2RenderingContext,
   shader: WebGLProgram,
-  name: string
+  name: UNIFORM
 ) => {
   const uniform = gl.getUniformLocation(shader, name);
   if (!uniform) {
     throw new Error(`Could not get ${name} uniform location`);
   }
+  uniforms[name] = uniform;
   return uniform;
 };
 
-const compileShader = (gl: WebGLRenderingContext, id: string) => {
-  const shaderScript = document.getElementById(id) as HTMLScriptElement;
-  if (!shaderScript) {
-    return null;
-  }
-
-  let str = "";
-  let k = shaderScript.firstChild;
-  while (k) {
-    if (k.nodeType == 3) {
-      str += k.textContent;
-    }
-    k = k.nextSibling;
-  }
-
-  let shader;
-  if (shaderScript.type == "x-shader/x-fragment") {
-    shader = gl.createShader(gl.FRAGMENT_SHADER);
-  } else if (shaderScript.type == "x-shader/x-vertex") {
-    shader = gl.createShader(gl.VERTEX_SHADER);
-  } else {
-    return null;
-  }
-
-  gl.shaderSource(shader, str);
+const compileShader = (
+  gl: WebGL2RenderingContext,
+  shaderType: number,
+  shaderBody: string
+) => {
+  const shader = gl.createShader(shaderType);
+  gl.shaderSource(shader, shaderBody);
   gl.compileShader(shader);
-
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
     throw gl.getShaderInfoLog(shader);
   }
-
   return shader;
 };

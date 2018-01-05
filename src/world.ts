@@ -7,11 +7,11 @@ export interface WorldBuffers {
   texture: WebGLBufferExtended;
 }
 
-export const loadWorldBuffers = async (gl: WebGLRenderingContext) => {
+export const loadWorldBuffers = async (gl: WebGL2RenderingContext) => {
   return handleLoadedWorld(gl, worldData);
 };
 
-const handleLoadedWorld = (gl: WebGLRenderingContext, data: string) => {
+const handleLoadedWorld = (gl: WebGL2RenderingContext, data: string) => {
   let vertexCount = 0;
   const vertexPositions: number[] = [];
   const vertexTextureCoords: number[] = [];

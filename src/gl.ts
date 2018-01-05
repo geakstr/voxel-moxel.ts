@@ -2,7 +2,7 @@ export const init = (canvas: HTMLCanvasElement) => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   try {
-    const gl = canvas.getContext("webgl");
+    const gl = canvas.getContext("webgl2") as WebGL2RenderingContext;
     if (!gl) {
       throw new Error("Unable to initialize WebGL");
     }

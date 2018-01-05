@@ -4,6 +4,7 @@ import { loadTextures } from "./textures";
 import * as camera from "./camera";
 import { render } from "./renderer";
 import { loadWorldBuffers } from "./world";
+import { createMesh } from "./meshes/Mesh";
 import "./index.scss";
 
 window.addEventListener("load", () => {
@@ -27,6 +28,8 @@ window.addEventListener("load", () => {
     const shader = createShader(gl);
     const buggers = await loadWorldBuffers(gl);
     loadTextures(gl);
-    render(gl, canvas, shader, buggers);
+
+    const mesh = createMesh(gl);
+    render(gl, canvas, shader, mesh);
   }
 });
