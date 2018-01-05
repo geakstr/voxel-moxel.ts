@@ -5,13 +5,30 @@ import { getTexture } from "./textures";
 import { getUniform, getAttrib } from "./shaders";
 import * as camera from "./camera";
 
+const fpsNode = document.querySelector("#fps")!;
+let elapsedTime = 0;
+let fps = 0;
+let lastTime = performance.now();
+
 export const render = (
   gl: WebGLRenderingContext,
   canvas: HTMLCanvasElement,
   shaders: WebGLProgram,
   buffers: WorldBuffers
 ) => {
-  requestAnimationFrame(render.bind(null, gl, canvas, shaders, buffers));
+  requestAnimationFrame(timeNow => {
+    render(gl, canvas, shaders, buffers);
+
+    const now = performance.now();
+    fps++;
+    elapsedTime += now - lastTime;
+    lastTime = now;
+    if (elapsedTime >= 1000) {
+      fpsNode.textContent = `${fps} FPS`;
+      fps = 0;
+      elapsedTime -= 1000;
+    }
+  });
   tick(gl, canvas, shaders, buffers);
 };
 

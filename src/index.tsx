@@ -1,4 +1,4 @@
-import { initGL } from "./gl";
+import { init as initGL } from "./gl";
 import { createShader } from "./shaders";
 import { loadTextures } from "./textures";
 import * as camera from "./camera";

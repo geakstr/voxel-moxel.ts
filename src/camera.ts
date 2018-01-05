@@ -1,4 +1,5 @@
-import { mat4, vec3, vec2, quat } from "gl-matrix";
+import { mat4, vec3, quat } from "gl-matrix";
+import { KEYS } from "./keyboard";
 import { applyQuaternion, multiplyScalar } from "./utils/math";
 
 const currentlyPressedKeys: { [key: string]: boolean } = {};
@@ -11,17 +12,17 @@ let maxPitchRate: number = 5;
 let maxHeadRate: number = 5;
 let isPaused: boolean = true;
 
-let lookAt: vec3 = vec3.fromValues(0, 0, 2);
-let position: vec3 = vec3.fromValues(0, 0, 0);
-let direction: vec3 = vec3.fromValues(0, 0, 1);
-let up: vec3 = vec3.fromValues(0, 1, 0);
-let positionDelta: vec3 = vec3.fromValues(0, 0, 0);
+const lookAt: vec3 = vec3.fromValues(0, 0, 2);
+const position: vec3 = vec3.fromValues(0, 0, 0);
+const direction: vec3 = vec3.fromValues(0, 0, 1);
+const up: vec3 = vec3.fromValues(0, 1, 0);
+const positionDelta: vec3 = vec3.fromValues(0, 0, 0);
 
-let projection: mat4 = mat4.create();
-let view: mat4 = mat4.create();
-let model: mat4 = mat4.create();
+const projection: mat4 = mat4.create();
+const view: mat4 = mat4.create();
+const model: mat4 = mat4.create();
 
-export let mvp: mat4 = mat4.create();
+export const mvp: mat4 = mat4.create();
 
 export const update = (aspect: number) => {
   if (false === isPaused) {
@@ -106,32 +107,32 @@ const changeYaw = (degrees: number) => {
 
 const move = () => {
   const temp = vec3.fromValues(0, 0, 0);
-  if (currentlyPressedKeys[69]) {
+  if (currentlyPressedKeys[KEYS.SPACE]) {
     vec3.copy(temp, up);
     multiplyScalar(temp, temp, scale);
     vec3.add(positionDelta, positionDelta, temp);
   }
-  if (currentlyPressedKeys[81]) {
+  if (currentlyPressedKeys[KEYS.L_SHIFT]) {
     vec3.copy(temp, up);
     multiplyScalar(temp, temp, scale);
     vec3.sub(positionDelta, positionDelta, temp);
   }
-  if (currentlyPressedKeys[65]) {
+  if (currentlyPressedKeys[KEYS.A]) {
     vec3.cross(temp, direction, up);
     multiplyScalar(temp, temp, scale);
     vec3.sub(positionDelta, positionDelta, temp);
   }
-  if (currentlyPressedKeys[68]) {
+  if (currentlyPressedKeys[KEYS.D]) {
     vec3.cross(temp, direction, up);
     multiplyScalar(temp, temp, scale);
     vec3.add(positionDelta, positionDelta, temp);
   }
-  if (currentlyPressedKeys[87]) {
+  if (currentlyPressedKeys[KEYS.W]) {
     vec3.copy(temp, direction);
     multiplyScalar(temp, temp, scale);
     vec3.add(positionDelta, positionDelta, temp);
   }
-  if (currentlyPressedKeys[83]) {
+  if (currentlyPressedKeys[KEYS.S]) {
     vec3.copy(temp, direction);
     multiplyScalar(temp, temp, scale);
     vec3.sub(positionDelta, positionDelta, temp);
