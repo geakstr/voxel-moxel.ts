@@ -7,7 +7,6 @@ export { SHADER_ATTR, SHADER_UNIFORM, SHADER_IN_OUT } from "./types";
 
 export const getUniform = (name: SHADER_UNIFORM) => uniforms[name];
 export const getAttr = (name: SHADER_ATTR) => attrs[name];
-export const hasAttr = (name: SHADER_ATTR) => is.number(attrs[name]);
 
 export const createShader = (gl: WebGL2RenderingContext) => {
   const fragmentShader = compileShader(gl, gl.FRAGMENT_SHADER, FRAGMENT_SHADER);

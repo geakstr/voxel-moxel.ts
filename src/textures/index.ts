@@ -4,11 +4,11 @@ import { fillAtlas, getAtlasCoord } from "./atlas";
 export { ATLAS, ATLAS_SIZE, CROP_SIZE } from "./constants";
 export { getAtlasCoord } from "./atlas";
 
+const texturesMap: { [key: string]: WebGLTextureExtended } = {};
+
 export class WebGLTextureExtended extends WebGLTexture {
   public image: HTMLImageElement;
 }
-
-const texturesMap: { [key: string]: WebGLTextureExtended } = {};
 
 export const addTexture = (
   gl: WebGL2RenderingContext,

@@ -12,9 +12,9 @@ export enum SHADER_UNIFORM {
 }
 
 export enum SHADER_IN_OUT {
-  POSITION = "v_pos",
-  TEX_COORD = "v_tex_coord",
-  TEX_OFFSET = "v_tex_offset",
-  TEX_INFO = "v_tex_info",
-  COLOR = "v_color"
+  POSITION = "io_pos",
+  TEX_COORD = "io_tex_coord",
+  TEX_OFFSET = "io_tex_offset",
+  TEX_INFO = "io_tex_info",
+  COLOR = "io_color"
 }

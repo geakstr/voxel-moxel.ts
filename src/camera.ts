@@ -30,21 +30,24 @@ export const update = (aspect: number) => {
   }
 
   mat4.perspective(projection, fov, aspect, 0.1, 100.0);
-
   vec3.normalize(direction, vec3.sub(direction, lookAt, position));
-
-  const axis = vec3.fromValues(0, 0, 0);
-  vec3.cross(axis, direction, up);
-
-  const pitchQuat = quat.fromValues(0, 0, 0, 1);
-  quat.setAxisAngle(pitchQuat, axis, pitch * Math.PI / 180.0);
-
-  const headingQuat = quat.fromValues(0, 0, 0, 1);
-  quat.setAxisAngle(headingQuat, up, yaw * Math.PI / 180.0);
-
-  const temp = quat.fromValues(0, 0, 0, 1);
-  quat.multiply(temp, pitchQuat, headingQuat);
-  applyQuaternion(direction, direction, temp);
+  applyQuaternion(
+    direction,
+    direction,
+    // pitchQuat * yawQuat
+    quat.multiply(
+      quat.create(),
+      // pitchQuat
+      quat.setAxisAngle(
+        quat.create(),
+        // axis
+        vec3.cross(vec3.create(), direction, up),
+        pitch * Math.PI / 180.0
+      ),
+      // yawQuat
+      quat.setAxisAngle(quat.create(), up, yaw * Math.PI / 180.0)
+    )
+  );
   vec3.add(position, position, positionDelta);
   vec3.add(lookAt, position, multiplyScalar(vec3.create(), direction, 1.0));
 
