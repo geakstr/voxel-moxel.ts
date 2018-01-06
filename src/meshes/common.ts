@@ -1,9 +1,11 @@
 import { getAttr, SHADER_ATTR } from "../shaders";
+import { TEXTURE, getAtlasCoord } from "~/textures";
 
 export const createVertexArray = (
   gl: WebGL2RenderingContext,
   vertices: number[],
-  texCoords: number[]
+  texCoords: number[],
+  texture: TEXTURE
 ) => {
   const vao = gl.createVertexArray();
   if (!vao) {
@@ -17,6 +19,8 @@ export const createVertexArray = (
   gl.enableVertexAttribArray(getAttr(SHADER_ATTR.POSITION));
   bytes += 12;
   gl.enableVertexAttribArray(getAttr(SHADER_ATTR.TEX_COORD));
+  bytes += 8;
+  gl.enableVertexAttribArray(getAttr(SHADER_ATTR.TEX_OFFSET));
   bytes += 8;
 
   let bytesOffset = 0;
@@ -38,10 +42,19 @@ export const createVertexArray = (
     bytesOffset
   );
   bytesOffset += 8;
+  gl.vertexAttribPointer(
+    getAttr(SHADER_ATTR.TEX_OFFSET),
+    2,
+    gl.FLOAT,
+    false,
+    bytes,
+    bytesOffset
+  );
+  bytesOffset += 8;
 
   gl.bufferData(
     gl.ARRAY_BUFFER,
-    new Float32Array(fillBufferData(vertices, texCoords)),
+    new Float32Array(fillBufferData(vertices, texCoords, texture)),
     gl.DYNAMIC_DRAW
   );
 
@@ -53,11 +66,14 @@ export const createVertexArray = (
   );
 
   gl.bindVertexArray(null);
-
   return vao;
 };
 
-const fillBufferData = (vertices: number[], texCoords: number[]) => {
+const fillBufferData = (
+  vertices: number[],
+  texCoords: number[],
+  texture: TEXTURE
+) => {
   const data = [];
   for (let v = 0, t = 0; v < vertices.length; v += 3, t += 2) {
     data.push(vertices[v]);
@@ -65,6 +81,10 @@ const fillBufferData = (vertices: number[], texCoords: number[]) => {
     data.push(vertices[v + 2]);
     data.push(texCoords[t]);
     data.push(texCoords[t + 1]);
+
+    const atlasCoord = getAtlasCoord(texture);
+    data.push(atlasCoord[0]);
+    data.push(atlasCoord[1]);
   }
   return data;
 };

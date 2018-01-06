@@ -1,16 +1,14 @@
+import { TEXTURE, TEXTURE_SRC } from "./constants";
+import { readAtlas, getCoord } from "./atlas";
+
+export { TEXTURE, ATLAS_SIZE, CROP_SIZE } from "./constants";
+export const getAtlasCoord = getCoord;
+
 export class WebGLTextureExtended extends WebGLTexture {
   public image: HTMLImageElement;
 }
 
 const texturesMap: { [key: string]: WebGLTextureExtended } = {};
-
-export enum TEXTURE {
-  COBBLESTONE
-}
-
-export enum TEXTURE_SRC {
-  COBBLESTONE = "./assets/cobblestone.png"
-}
 
 export const addTexture = (
   gl: WebGL2RenderingContext,
@@ -23,9 +21,12 @@ export const addTexture = (
 };
 
 export const getTexture = (name: TEXTURE) => texturesMap[name];
+export const getAtlas = () => getTexture(TEXTURE.ATLAS);
 
-export const loadTextures = (gl: WebGL2RenderingContext) =>
-  addTexture(gl, TEXTURE.COBBLESTONE, TEXTURE_SRC.COBBLESTONE);
+export const loadTextures = (gl: WebGL2RenderingContext) => {
+  readAtlas();
+  addTexture(gl, TEXTURE.ATLAS, TEXTURE_SRC.ATLAS);
+};
 
 const createTexture = (gl: WebGL2RenderingContext, src: string) => {
   const texture = gl.createTexture() as WebGLTextureExtended;
