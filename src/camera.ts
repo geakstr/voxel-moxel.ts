@@ -23,7 +23,7 @@ const model: mat4 = mat4.create();
 
 const mvp: mat4 = mat4.create();
 
-const axis: vec3 = vec3.create();
+const pitchAxis: vec3 = vec3.create();
 const tempMove: vec3 = vec3.create();
 const pitchMulYawQuat: quat = quat.create();
 const pitchQuat: quat = quat.create();
@@ -55,13 +55,14 @@ export const update = (aspect: number): mat4 => {
       quat.setAxisAngle(
         pitchQuat,
         // axis
-        vec3.cross(axis, direction, up),
+        vec3.cross(pitchAxis, direction, up),
         pitch * Math.PI / 180.0
       ),
       // yawQuat
       quat.setAxisAngle(yawQuat, up, yaw * Math.PI / 180.0)
     )
   );
+
   vec3.add(position, position, positionDelta);
   vec3.add(lookAt, position, multiplyScalar(lookAt, direction, 1.0));
 
@@ -146,14 +147,12 @@ const move = () => {
     vec3.add(positionDelta, positionDelta, tempMove);
   }
   if (currentlyPressedKeys[KEYS.W]) {
-    vec3.cross(tempMove, direction, up);
-    vec3.rotateY(tempMove, tempMove, up, 90 * Math.PI / 180);
+    vec3.rotateY(tempMove, vec3.create(), direction, 180 * Math.PI / 180);
     multiplyScalar(tempMove, tempMove, scale);
     vec3.add(positionDelta, positionDelta, tempMove);
   }
   if (currentlyPressedKeys[KEYS.S]) {
-    vec3.cross(tempMove, direction, up);
-    vec3.rotateY(tempMove, tempMove, up, 90 * Math.PI / 180);
+    vec3.rotateY(tempMove, vec3.create(), direction, 180 * Math.PI / 180);
     multiplyScalar(tempMove, tempMove, scale);
     vec3.sub(positionDelta, positionDelta, tempMove);
   }
