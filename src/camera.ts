@@ -2,20 +2,6 @@ import { mat4, vec3, quat } from "gl-matrix";
 import { KEYS } from "./keyboard";
 import { applyQuaternion, multiplyScalar } from "./utils/math";
 
-const currentlyPressedKeys: { [key: string]: boolean } = {};
-
-const lookAt: vec3 = vec3.fromValues(0, 0, 2);
-const position: vec3 = vec3.fromValues(0, 0, 0);
-const direction: vec3 = vec3.fromValues(0, 0, 1);
-const up: vec3 = vec3.fromValues(0, 1, 0);
-const positionDelta: vec3 = vec3.fromValues(0, 0, 0);
-
-const projection: mat4 = mat4.create();
-const view: mat4 = mat4.create();
-const model: mat4 = mat4.create();
-
-const mvp: mat4 = mat4.create();
-
 let fov: number = 45;
 let scale: number = 0.01;
 let yaw: number = 0;
@@ -24,32 +10,60 @@ let maxPitchRate: number = 5;
 let maxHeadRate: number = 5;
 let isPaused: boolean = true;
 
-export const update = (aspect: number) => {
+const lookAt: vec3 = vec3.fromValues(0, 0, 2);
+const position: vec3 = vec3.fromValues(0, 0, 0);
+const direction: vec3 = vec3.fromValues(0, 0, 1);
+const up: vec3 = vec3.fromValues(0, 1, 0);
+const front: vec3 = vec3.fromValues(0, 0, 1);
+const positionDelta: vec3 = vec3.fromValues(0, 0, 0);
+
+const projection: mat4 = mat4.create();
+const view: mat4 = mat4.create();
+const model: mat4 = mat4.create();
+
+const mvp: mat4 = mat4.create();
+
+const axis: vec3 = vec3.create();
+const tempMove: vec3 = vec3.create();
+const pitchMulYawQuat: quat = quat.create();
+const pitchQuat: quat = quat.create();
+const yawQuat: quat = quat.create();
+
+const currentlyPressedKeys: { [key: string]: boolean } = {};
+
+/**
+ * Calculate `model × view × projection` matrix (mvp)
+ * @param {number} aspect Aspect ratio
+ * @returns {mat4} mvp
+ */
+export const update = (aspect: number): mat4 => {
   if (false === isPaused) {
     move();
   }
 
   mat4.perspective(projection, fov, aspect, 0.1, 100.0);
   vec3.normalize(direction, vec3.sub(direction, lookAt, position));
+
+  // rotate camera by quaternions
   applyQuaternion(
     direction,
     direction,
     // pitchQuat * yawQuat
     quat.multiply(
-      quat.create(),
+      pitchMulYawQuat,
       // pitchQuat
       quat.setAxisAngle(
-        quat.create(),
+        pitchQuat,
         // axis
-        vec3.cross(vec3.create(), direction, up),
+        vec3.cross(axis, direction, up),
         pitch * Math.PI / 180.0
       ),
       // yawQuat
-      quat.setAxisAngle(quat.create(), up, yaw * Math.PI / 180.0)
+      quat.setAxisAngle(yawQuat, up, yaw * Math.PI / 180.0)
     )
   );
   vec3.add(position, position, positionDelta);
-  vec3.add(lookAt, position, multiplyScalar(vec3.create(), direction, 1.0));
+  vec3.add(lookAt, position, multiplyScalar(lookAt, direction, 1.0));
 
   pitch *= 0.5;
   yaw *= 0.5;
@@ -57,9 +71,9 @@ export const update = (aspect: number) => {
   multiplyScalar(positionDelta, positionDelta, 0.8);
 
   mat4.lookAt(view, position, lookAt, up);
-  mat4.multiply(mvp, projection, mat4.multiply(mvp, view, model));
 
-  return mvp;
+  // calc projection * view * model matrix  (mvp)
+  return mat4.multiply(mvp, projection, mat4.multiply(mvp, view, model));
 };
 
 export const pause = () => (isPaused = true);
@@ -111,36 +125,37 @@ const changeYaw = (degrees: number) => {
 };
 
 const move = () => {
-  const temp = vec3.fromValues(0, 0, 0);
   if (currentlyPressedKeys[KEYS.SPACE]) {
-    vec3.copy(temp, up);
-    multiplyScalar(temp, temp, scale);
-    vec3.add(positionDelta, positionDelta, temp);
+    vec3.copy(tempMove, up);
+    multiplyScalar(tempMove, tempMove, scale);
+    vec3.add(positionDelta, positionDelta, tempMove);
   }
   if (currentlyPressedKeys[KEYS.L_SHIFT]) {
-    vec3.copy(temp, up);
-    multiplyScalar(temp, temp, scale);
-    vec3.sub(positionDelta, positionDelta, temp);
+    vec3.copy(tempMove, up);
+    multiplyScalar(tempMove, tempMove, scale);
+    vec3.sub(positionDelta, positionDelta, tempMove);
   }
   if (currentlyPressedKeys[KEYS.A]) {
-    vec3.cross(temp, direction, up);
-    multiplyScalar(temp, temp, scale);
-    vec3.sub(positionDelta, positionDelta, temp);
+    vec3.cross(tempMove, direction, up);
+    multiplyScalar(tempMove, tempMove, scale);
+    vec3.sub(positionDelta, positionDelta, tempMove);
   }
   if (currentlyPressedKeys[KEYS.D]) {
-    vec3.cross(temp, direction, up);
-    multiplyScalar(temp, temp, scale);
-    vec3.add(positionDelta, positionDelta, temp);
+    vec3.cross(tempMove, direction, up);
+    multiplyScalar(tempMove, tempMove, scale);
+    vec3.add(positionDelta, positionDelta, tempMove);
   }
   if (currentlyPressedKeys[KEYS.W]) {
-    vec3.copy(temp, direction);
-    multiplyScalar(temp, temp, scale);
-    vec3.add(positionDelta, positionDelta, temp);
+    vec3.cross(tempMove, direction, up);
+    vec3.rotateY(tempMove, tempMove, up, 90 * Math.PI / 180);
+    multiplyScalar(tempMove, tempMove, scale);
+    vec3.add(positionDelta, positionDelta, tempMove);
   }
   if (currentlyPressedKeys[KEYS.S]) {
-    vec3.copy(temp, direction);
-    multiplyScalar(temp, temp, scale);
-    vec3.sub(positionDelta, positionDelta, temp);
+    vec3.cross(tempMove, direction, up);
+    vec3.rotateY(tempMove, tempMove, up, 90 * Math.PI / 180);
+    multiplyScalar(tempMove, tempMove, scale);
+    vec3.sub(positionDelta, positionDelta, tempMove);
   }
 };
 

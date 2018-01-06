@@ -2,6 +2,7 @@ import { init as initGL } from "./gl";
 import { createShader } from "./shaders";
 import { loadTextures, ATLAS } from "./textures";
 import * as camera from "./camera";
+import { KEYS } from "./keyboard";
 import { render } from "./renderer";
 import { createCube } from "./meshes/cube";
 import "./index.scss";
@@ -11,16 +12,38 @@ window.addEventListener("load", () => {
 
   run();
 
-  const pointerlockchange = (event: Event) => {
-    if (document.pointerLockElement === canvas) {
-      camera.resume();
-    } else {
-      camera.pause();
-    }
-  };
-
   canvas.addEventListener("click", canvas.requestPointerLock, false);
-  document.addEventListener("pointerlockchange", pointerlockchange, false);
+  document.addEventListener(
+    "pointerlockchange",
+    (event: PointerEvent) => {
+      if (document.pointerLockElement === canvas) {
+        camera.resume();
+      } else {
+        camera.pause();
+      }
+    },
+    false
+  );
+  document.addEventListener(
+    "keydown",
+    (event: KeyboardEvent) => {
+      if (event.keyCode === KEYS.ENTER) {
+        const element = canvas as any;
+        if (element.requestFullScreen) {
+          element.requestFullScreen();
+        } else if (element.webkitRequestFullScreen) {
+          element.webkitRequestFullScreen();
+        } else if (element.mozRequestFullScreen) {
+          element.mozRequestFullScreen();
+        }
+      }
+    },
+    false
+  );
+  window.addEventListener("resize", () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
 
   async function run() {
     const gl = initGL(canvas);

@@ -40,7 +40,7 @@ const tick = (
   gl.uniformMatrix4fv(
     getUniform(SHADER_UNIFORM.MVP_MATRIX),
     false,
-    camera.update(canvas.width / canvas.height) // model * view * projection matrix
+    camera.update(canvas.width / canvas.height)
   );
   const cubesCount = cubes.length;
   for (let i = 0; i < cubesCount; i += 1) {
