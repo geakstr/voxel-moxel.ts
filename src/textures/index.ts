@@ -1,8 +1,8 @@
-import { TEXTURE, TEXTURE_SRC } from "./constants";
-import { readAtlas, getCoord } from "./atlas";
+import { ATLAS, TEXTURE, TEXTURE_SRC } from "./constants";
+import { fillAtlas, getAtlasCoord } from "./atlas";
 
-export { TEXTURE, ATLAS_SIZE, CROP_SIZE } from "./constants";
-export const getAtlasCoord = getCoord;
+export { ATLAS, ATLAS_SIZE, CROP_SIZE } from "./constants";
+export { getAtlasCoord } from "./atlas";
 
 export class WebGLTextureExtended extends WebGLTexture {
   public image: HTMLImageElement;
@@ -24,7 +24,7 @@ export const getTexture = (name: TEXTURE) => texturesMap[name];
 export const getAtlas = () => getTexture(TEXTURE.ATLAS);
 
 export const loadTextures = (gl: WebGL2RenderingContext) => {
-  readAtlas();
+  fillAtlas();
   addTexture(gl, TEXTURE.ATLAS, TEXTURE_SRC.ATLAS);
 };
 

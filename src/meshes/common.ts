@@ -1,11 +1,11 @@
 import { getAttr, SHADER_ATTR } from "../shaders";
-import { TEXTURE, getAtlasCoord } from "~/textures";
+import { ATLAS, getAtlasCoord } from "~/textures";
 
 export const createVertexArray = (
   gl: WebGL2RenderingContext,
   vertices: number[],
   texCoords: number[],
-  texture: TEXTURE
+  texture: ATLAS
 ) => {
   const vao = gl.createVertexArray();
   if (!vao) {
@@ -72,7 +72,7 @@ export const createVertexArray = (
 const fillBufferData = (
   vertices: number[],
   texCoords: number[],
-  texture: TEXTURE
+  texture: ATLAS
 ) => {
   const data = [];
   for (let v = 0, t = 0; v < vertices.length; v += 3, t += 2) {

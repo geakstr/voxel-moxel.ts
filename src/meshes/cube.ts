@@ -1,5 +1,5 @@
 import { getAtlas } from "~/textures";
-import { TEXTURE, ATLAS_SIZE, CROP_SIZE } from "~/textures";
+import { ATLAS, ATLAS_SIZE, CROP_SIZE } from "~/textures";
 import { getUniform, SHADER_UNIFORM } from "~/shaders";
 import { createVertexArray } from "./common";
 
@@ -8,7 +8,7 @@ export const createCube = (
   xOffset: number,
   yOffset: number,
   zOffset: number,
-  texture: TEXTURE
+  texture: ATLAS
 ): WebGLVertexArrayObject => {
   const vertices = translate(VERTICES, xOffset, yOffset, zOffset);
   const texCoords = TEX_COORDS;

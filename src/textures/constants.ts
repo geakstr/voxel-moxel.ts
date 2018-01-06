@@ -1,5 +1,8 @@
 export enum TEXTURE {
-  ATLAS = "atlas",
+  ATLAS = "atlas"
+}
+
+export enum ATLAS {
   COBBLESTONE = "cobblestone",
   GRASS = "grass",
   STONE = "stone",
