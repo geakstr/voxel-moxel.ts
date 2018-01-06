@@ -3,8 +3,7 @@ import { createShader } from "./shaders";
 import { loadTextures } from "./textures";
 import * as camera from "./camera";
 import { render } from "./renderer";
-import { loadWorldBuffers } from "./world";
-import { createMesh } from "./meshes/Mesh";
+import { createCube } from "./meshes/cube";
 import "./index.scss";
 
 window.addEventListener("load", () => {
@@ -26,10 +25,12 @@ window.addEventListener("load", () => {
   async function run() {
     const gl = initGL(canvas);
     const shader = createShader(gl);
-    const buggers = await loadWorldBuffers(gl);
     loadTextures(gl);
-
-    const mesh = createMesh(gl);
-    render(gl, canvas, shader, mesh);
+    const cubes = [
+      createCube(gl, 0, 0, 0),
+      createCube(gl, 1, 0, 0),
+      createCube(gl, 2, 0, 0)
+    ];
+    render(gl, canvas, shader, cubes);
   }
 });

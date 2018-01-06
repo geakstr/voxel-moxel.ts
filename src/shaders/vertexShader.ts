@@ -1,0 +1,24 @@
+import { SHADER_ATTR, SHADER_UNIFORM, SHADER_IN_OUT } from "./types";
+
+// prettier-ignore
+export const VERTEX_SHADER = `
+#version 300 es
+
+in vec3 ${SHADER_ATTR.POSITION};
+in vec2 ${SHADER_ATTR.TEX_COORD};
+in vec2 ${SHADER_ATTR.TEX_OFFSET};
+
+uniform mat4 ${SHADER_UNIFORM.MVP_MATRIX};
+
+out vec3 ${SHADER_IN_OUT.POSITION};
+out vec2 ${SHADER_IN_OUT.TEX_COORD};
+out vec2 ${SHADER_IN_OUT.TEX_OFFSET};
+
+void main(void) {  
+  ${SHADER_IN_OUT.POSITION} = ${SHADER_ATTR.POSITION};
+  ${SHADER_IN_OUT.TEX_COORD} = ${SHADER_ATTR.TEX_COORD};
+  ${SHADER_IN_OUT.TEX_OFFSET} = ${SHADER_ATTR.TEX_OFFSET};
+
+  gl_Position = ${SHADER_UNIFORM.MVP_MATRIX} * vec4(${SHADER_ATTR.POSITION}, 1.0);
+}
+`.trim();

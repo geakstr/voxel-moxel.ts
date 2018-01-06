@@ -4,14 +4,6 @@ import { applyQuaternion, multiplyScalar } from "./utils/math";
 
 const currentlyPressedKeys: { [key: string]: boolean } = {};
 
-let fov: number = 45;
-let scale: number = 0.01;
-let yaw: number = 0;
-let pitch: number = 0;
-let maxPitchRate: number = 5;
-let maxHeadRate: number = 5;
-let isPaused: boolean = true;
-
 const lookAt: vec3 = vec3.fromValues(0, 0, 2);
 const position: vec3 = vec3.fromValues(0, 0, 0);
 const direction: vec3 = vec3.fromValues(0, 0, 1);
@@ -22,7 +14,15 @@ const projection: mat4 = mat4.create();
 const view: mat4 = mat4.create();
 const model: mat4 = mat4.create();
 
-export const mvp: mat4 = mat4.create();
+const mvp: mat4 = mat4.create();
+
+let fov: number = 45;
+let scale: number = 0.01;
+let yaw: number = 0;
+let pitch: number = 0;
+let maxPitchRate: number = 5;
+let maxHeadRate: number = 5;
+let isPaused: boolean = true;
 
 export const update = (aspect: number) => {
   if (false === isPaused) {
@@ -55,6 +55,8 @@ export const update = (aspect: number) => {
 
   mat4.lookAt(view, position, lookAt, up);
   mat4.multiply(mvp, projection, mat4.multiply(mvp, view, model));
+
+  return mvp;
 };
 
 export const pause = () => (isPaused = true);

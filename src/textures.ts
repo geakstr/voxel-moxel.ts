@@ -1,4 +1,6 @@
-import { WebGLTextureExtended } from "./extendedClasses";
+export class WebGLTextureExtended extends WebGLTexture {
+  public image: HTMLImageElement;
+}
 
 const texturesMap: { [key: string]: WebGLTextureExtended } = {};
 
@@ -22,9 +24,8 @@ export const addTexture = (
 
 export const getTexture = (name: TEXTURE) => texturesMap[name];
 
-export const loadTextures = (gl: WebGL2RenderingContext) => {
+export const loadTextures = (gl: WebGL2RenderingContext) =>
   addTexture(gl, TEXTURE.COBBLESTONE, TEXTURE_SRC.COBBLESTONE);
-};
 
 const createTexture = (gl: WebGL2RenderingContext, src: string) => {
   const texture = gl.createTexture() as WebGLTextureExtended;
@@ -42,7 +43,10 @@ const handleLoadedTexture = (
   texture: WebGLTextureExtended
 ) => {
   gl.bindTexture(gl.TEXTURE_2D, texture);
-  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
   gl.texImage2D(
     gl.TEXTURE_2D,
     0,
@@ -51,10 +55,6 @@ const handleLoadedTexture = (
     gl.UNSIGNED_BYTE,
     texture.image
   );
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
   gl.bindTexture(gl.TEXTURE_2D, null);
 };
 

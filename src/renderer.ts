@@ -1,10 +1,6 @@
-import { mat3, mat4, vec3 } from "gl-matrix";
-import { degToRad } from "./utils/math";
-import { WorldBuffers } from "./world";
-import { getTexture, TEXTURE } from "./textures";
-import { getUniform, getAttr, ATTR, UNIFORM } from "./shaders";
+import { getUniform, SHADER_UNIFORM } from "./shaders";
 import * as camera from "./camera";
-import { Mesh } from "./meshes/Mesh";
+import { renderCube } from "./meshes/cube";
 
 const fpsNode = document.querySelector("#fps")!;
 let elapsedTime = 0;
@@ -15,10 +11,10 @@ export const render = (
   gl: WebGL2RenderingContext,
   canvas: HTMLCanvasElement,
   shaders: WebGLProgram,
-  mesh: Mesh
+  cubes: WebGLVertexArrayObject[]
 ) => {
   requestAnimationFrame(timeNow => {
-    render(gl, canvas, shaders, mesh);
+    render(gl, canvas, shaders, cubes);
 
     const now = performance.now();
     fps++;
@@ -30,23 +26,24 @@ export const render = (
       elapsedTime -= 1000;
     }
   });
-  tick(gl, canvas, shaders, mesh);
+  tick(gl, canvas, shaders, cubes);
 };
 
 const tick = (
   gl: WebGL2RenderingContext,
   canvas: HTMLCanvasElement,
   shader: WebGLProgram,
-  mesh: Mesh
+  cubes: WebGLVertexArrayObject[]
 ) => {
   gl.viewport(0, 0, canvas.width, canvas.height);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-  camera.update(canvas.width / canvas.height);
-  gl.uniformMatrix4fv(getUniform(UNIFORM.MVP_MATRIX), false, camera.mvp);
-  mesh();
-};
-
-const setMatrixUniforms = (gl: WebGL2RenderingContext, mvp: mat4) => {
-  gl.uniformMatrix4fv(getUniform(UNIFORM.MVP_MATRIX), false, mvp);
+  gl.uniformMatrix4fv(
+    getUniform(SHADER_UNIFORM.MVP_MATRIX),
+    false,
+    camera.update(canvas.width / canvas.height) // model * view * projection matrix
+  );
+  const cubesCount = cubes.length;
+  for (let i = 0; i < cubesCount; i += 1) {
+    renderCube(gl, cubes[i]);
+  }
 };
