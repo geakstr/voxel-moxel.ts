@@ -1,5 +1,4 @@
 import { ATLAS, getAtlasCoord } from "~/textures";
-import { createVertexArray } from "./common";
 
 export enum SIDE {
   ALL = "ALL",

@@ -1,5 +1,4 @@
 import { getAttr, SHADER_ATTR } from "../shaders";
-import { ATLAS, getAtlasCoord } from "~/textures";
 
 export const createVertexArray = (
   gl: WebGL2RenderingContext,

@@ -4,6 +4,7 @@ import { Chunk } from "./world/chunk";
 import { renderWorld } from "./world/world";
 
 const fpsNode = document.querySelector("#fps")!;
+let now = 0;
 let elapsedTime = 0;
 let fps = 0;
 let lastTime = performance.now();
@@ -17,7 +18,7 @@ export const render = (
   requestAnimationFrame(timeNow => {
     render(gl, canvas, shaders, world);
 
-    const now = performance.now();
+    now = performance.now();
     fps++;
     elapsedTime += now - lastTime;
     lastTime = now;

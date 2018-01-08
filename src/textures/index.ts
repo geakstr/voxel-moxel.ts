@@ -27,7 +27,7 @@ export const getTexture = (name: TEXTURE) => texturesMap[name];
 export const getRandomTexture = () => {
   const keys = Object.keys(ATLAS);
   const max = keys.length - 1;
-  return ATLAS[keys[rnd(0, max)] as any] as ATLAS;
+  return keys[rnd(0, max)] as ATLAS;
 };
 export const getAtlas = () => getTexture(TEXTURE.ATLAS);
 

@@ -3,7 +3,7 @@ import { KEYS } from "./keyboard";
 import { applyQuaternion, multiplyScalar } from "./utils/math";
 
 let fov: number = 45;
-let scale: number = 0.01;
+let scale: number = 0.1;
 let yaw: number = 0;
 let pitch: number = 0;
 let maxPitchRate: number = 5;
@@ -28,6 +28,7 @@ const tempMove: vec3 = vec3.create();
 const pitchMulYawQuat: quat = quat.create();
 const pitchQuat: quat = quat.create();
 const yawQuat: quat = quat.create();
+const zeroDot: vec3 = vec3.create();
 
 const currentlyPressedKeys: { [key: string]: boolean } = {};
 
@@ -41,7 +42,7 @@ export const update = (aspect: number): mat4 => {
     move();
   }
 
-  mat4.perspective(projection, fov, aspect, 0.1, 100.0);
+  mat4.perspective(projection, fov, aspect, 0.1, 1000.0);
   vec3.normalize(direction, vec3.sub(direction, lookAt, position));
 
   // rotate camera by quaternions
@@ -147,12 +148,12 @@ const move = () => {
     vec3.add(positionDelta, positionDelta, tempMove);
   }
   if (currentlyPressedKeys[KEYS.W]) {
-    vec3.rotateY(tempMove, vec3.create(), direction, 180 * Math.PI / 180);
+    vec3.rotateY(tempMove, zeroDot, direction, 180 * Math.PI / 180);
     multiplyScalar(tempMove, tempMove, scale);
     vec3.add(positionDelta, positionDelta, tempMove);
   }
   if (currentlyPressedKeys[KEYS.S]) {
-    vec3.rotateY(tempMove, vec3.create(), direction, 180 * Math.PI / 180);
+    vec3.rotateY(tempMove, zeroDot, direction, 180 * Math.PI / 180);
     multiplyScalar(tempMove, tempMove, scale);
     vec3.sub(positionDelta, positionDelta, tempMove);
   }
