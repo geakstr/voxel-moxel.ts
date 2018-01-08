@@ -4,7 +4,7 @@ import { loadTextures, ATLAS } from "./textures";
 import * as camera from "./camera";
 import { KEYS } from "./keyboard";
 import { render } from "./renderer";
-import { createCube } from "./meshes/cube";
+import { createWorld } from "./world/world";
 import "./index.scss";
 
 window.addEventListener("load", () => {
@@ -49,11 +49,7 @@ window.addEventListener("load", () => {
     const gl = initGL(canvas);
     const shader = createShader(gl);
     loadTextures(gl);
-    const cubes = [
-      createCube(gl, 0, 0, 0, ATLAS.REDSTONE_ORE),
-      createCube(gl, 1, 0, 0, ATLAS.GOLD_ORE),
-      createCube(gl, 2, 0, 0, ATLAS.DIAMOND_ORE)
-    ];
-    render(gl, canvas, shader, cubes);
+    const world = createWorld(gl);
+    render(gl, canvas, shader, world);
   }
 });

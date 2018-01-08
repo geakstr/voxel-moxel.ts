@@ -1,6 +1,7 @@
 import { getUniform, SHADER_UNIFORM } from "./shaders";
 import * as camera from "./camera";
-import { renderCube } from "./meshes/cube";
+import { Chunk } from "./world/chunk";
+import { renderWorld } from "./world/world";
 
 const fpsNode = document.querySelector("#fps")!;
 let elapsedTime = 0;
@@ -11,10 +12,10 @@ export const render = (
   gl: WebGL2RenderingContext,
   canvas: HTMLCanvasElement,
   shaders: WebGLProgram,
-  cubes: WebGLVertexArrayObject[]
+  world: Chunk[]
 ) => {
   requestAnimationFrame(timeNow => {
-    render(gl, canvas, shaders, cubes);
+    render(gl, canvas, shaders, world);
 
     const now = performance.now();
     fps++;
@@ -26,14 +27,14 @@ export const render = (
       elapsedTime -= 1000;
     }
   });
-  tick(gl, canvas, shaders, cubes);
+  tick(gl, canvas, shaders, world);
 };
 
 const tick = (
   gl: WebGL2RenderingContext,
   canvas: HTMLCanvasElement,
   shader: WebGLProgram,
-  cubes: WebGLVertexArrayObject[]
+  world: Chunk[]
 ) => {
   gl.viewport(0, 0, canvas.width, canvas.height);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -42,8 +43,5 @@ const tick = (
     false,
     camera.update(canvas.width / canvas.height)
   );
-  const cubesCount = cubes.length;
-  for (let i = 0; i < cubesCount; i += 1) {
-    renderCube(gl, cubes[i]);
-  }
+  renderWorld(gl, world);
 };

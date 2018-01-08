@@ -4,6 +4,9 @@ import { atlas } from "./atlas-map";
 
 const coords: { [key: string]: vec2 } = {};
 
+const rnd = (from: number, to: number) =>
+  Math.floor(Math.random() * (to - from + 1)) + from;
+
 export const getAtlasCoord = (textureName: ATLAS) => coords[textureName];
 
 export const fillAtlas = () => {

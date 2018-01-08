@@ -11,7 +11,7 @@ let maxHeadRate: number = 5;
 let isPaused: boolean = true;
 
 const lookAt: vec3 = vec3.fromValues(0, 0, 2);
-const position: vec3 = vec3.fromValues(0, 0, 0);
+const position: vec3 = vec3.fromValues(5, 5, 2);
 const direction: vec3 = vec3.fromValues(0, 0, 1);
 const up: vec3 = vec3.fromValues(0, 1, 0);
 const front: vec3 = vec3.fromValues(0, 0, 1);
@@ -138,12 +138,12 @@ const move = () => {
   }
   if (currentlyPressedKeys[KEYS.A]) {
     vec3.cross(tempMove, direction, up);
-    multiplyScalar(tempMove, tempMove, scale);
+    multiplyScalar(tempMove, tempMove, scale * 2);
     vec3.sub(positionDelta, positionDelta, tempMove);
   }
   if (currentlyPressedKeys[KEYS.D]) {
     vec3.cross(tempMove, direction, up);
-    multiplyScalar(tempMove, tempMove, scale);
+    multiplyScalar(tempMove, tempMove, scale * 2);
     vec3.add(positionDelta, positionDelta, tempMove);
   }
   if (currentlyPressedKeys[KEYS.W]) {

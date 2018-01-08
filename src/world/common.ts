@@ -3,9 +3,8 @@ import { ATLAS, getAtlasCoord } from "~/textures";
 
 export const createVertexArray = (
   gl: WebGL2RenderingContext,
-  vertices: number[],
-  texCoords: number[],
-  texture: ATLAS
+  data: number[],
+  indicesCount: number
 ) => {
   const vao = gl.createVertexArray();
   if (!vao) {
@@ -52,41 +51,17 @@ export const createVertexArray = (
   );
   bytesOffset += 8;
 
-  gl.bufferData(
-    gl.ARRAY_BUFFER,
-    new Float32Array(fillBufferData(vertices, texCoords, texture)),
-    gl.DYNAMIC_DRAW
-  );
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.DYNAMIC_DRAW);
 
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, createBuffer(gl, "ibo"));
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
-    new Uint32Array(createIndex(vertices)),
+    new Uint32Array(createIndex(indicesCount)),
     gl.DYNAMIC_DRAW
   );
 
   gl.bindVertexArray(null);
   return vao;
-};
-
-const fillBufferData = (
-  vertices: number[],
-  texCoords: number[],
-  texture: ATLAS
-) => {
-  const data = [];
-  for (let v = 0, t = 0; v < vertices.length; v += 3, t += 2) {
-    data.push(vertices[v]);
-    data.push(vertices[v + 1]);
-    data.push(vertices[v + 2]);
-    data.push(texCoords[t]);
-    data.push(texCoords[t + 1]);
-
-    const atlasCoord = getAtlasCoord(texture);
-    data.push(atlasCoord[0]);
-    data.push(atlasCoord[1]);
-  }
-  return data;
 };
 
 const createBuffer = (gl: WebGL2RenderingContext, name: string) => {
@@ -97,10 +72,9 @@ const createBuffer = (gl: WebGL2RenderingContext, name: string) => {
   return buffer;
 };
 
-const createIndex = (vertices: number[]) => {
-  const count = vertices.length / 2;
+const createIndex = (indicesCount: number) => {
   const indices = [];
-  for (let i = 0, bytes = 0; bytes < count; i += 4, bytes += 6) {
+  for (let i = 0, bytes = 0; bytes < indicesCount; i += 4, bytes += 6) {
     indices.push(i);
     indices.push(i + 1);
     indices.push(i + 2);
