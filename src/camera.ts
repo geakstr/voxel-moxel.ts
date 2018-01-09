@@ -1,6 +1,17 @@
-import { mat4, vec3, quat } from "gl-matrix";
+import { mat4, vec3, quat, glMatrix } from "gl-matrix";
 import { KEYS } from "./keyboard";
-import { applyQuaternion, multiplyScalar } from "./utils/math";
+
+export const projection: mat4 = mat4.create();
+export const view: mat4 = mat4.create();
+export const model: mat4 = mat4.create();
+export const mvp: mat4 = mat4.create();
+
+export const lookAt: vec3 = vec3.fromValues(0, 0, 2);
+export const position: vec3 = vec3.fromValues(5, 5, 2);
+export const direction: vec3 = vec3.fromValues(0, 0, 1);
+export const up: vec3 = vec3.fromValues(0, 1, 0);
+export const front: vec3 = vec3.fromValues(0, 0, 1);
+export const positionDelta: vec3 = vec3.fromValues(0, 0, 0);
 
 let fov: number = 45;
 let scale: number = 0.1;
@@ -9,19 +20,6 @@ let pitch: number = 0;
 let maxPitchRate: number = 5;
 let maxHeadRate: number = 5;
 let isPaused: boolean = true;
-
-const lookAt: vec3 = vec3.fromValues(0, 0, 2);
-const position: vec3 = vec3.fromValues(5, 5, 2);
-const direction: vec3 = vec3.fromValues(0, 0, 1);
-const up: vec3 = vec3.fromValues(0, 1, 0);
-const front: vec3 = vec3.fromValues(0, 0, 1);
-const positionDelta: vec3 = vec3.fromValues(0, 0, 0);
-
-const projection: mat4 = mat4.create();
-const view: mat4 = mat4.create();
-const model: mat4 = mat4.create();
-
-const mvp: mat4 = mat4.create();
 
 const pitchAxis: vec3 = vec3.create();
 const tempMove: vec3 = vec3.create();
@@ -46,7 +44,7 @@ export const update = (aspect: number): mat4 => {
   vec3.normalize(direction, vec3.sub(direction, lookAt, position));
 
   // rotate camera by quaternions
-  applyQuaternion(
+  vec3.transformQuat(
     direction,
     direction,
     // pitchQuat * yawQuat
@@ -57,20 +55,20 @@ export const update = (aspect: number): mat4 => {
         pitchQuat,
         // axis
         vec3.cross(pitchAxis, direction, up),
-        pitch * Math.PI / 180.0
+        glMatrix.toRadian(pitch)
       ),
       // yawQuat
-      quat.setAxisAngle(yawQuat, up, yaw * Math.PI / 180.0)
+      quat.setAxisAngle(yawQuat, up, glMatrix.toRadian(yaw))
     )
   );
 
   vec3.add(position, position, positionDelta);
-  vec3.add(lookAt, position, multiplyScalar(lookAt, direction, 1.0));
+  vec3.add(lookAt, position, vec3.scale(lookAt, direction, 1.0));
 
   pitch *= 0.5;
   yaw *= 0.5;
 
-  multiplyScalar(positionDelta, positionDelta, 0.8);
+  vec3.scale(positionDelta, positionDelta, 0.8);
 
   mat4.lookAt(view, position, lookAt, up);
 
@@ -129,32 +127,32 @@ const changeYaw = (degrees: number) => {
 const move = () => {
   if (currentlyPressedKeys[KEYS.SPACE]) {
     vec3.copy(tempMove, up);
-    multiplyScalar(tempMove, tempMove, scale);
+    vec3.scale(tempMove, tempMove, scale);
     vec3.add(positionDelta, positionDelta, tempMove);
   }
   if (currentlyPressedKeys[KEYS.L_SHIFT]) {
     vec3.copy(tempMove, up);
-    multiplyScalar(tempMove, tempMove, scale);
+    vec3.scale(tempMove, tempMove, scale);
     vec3.sub(positionDelta, positionDelta, tempMove);
   }
   if (currentlyPressedKeys[KEYS.A]) {
     vec3.cross(tempMove, direction, up);
-    multiplyScalar(tempMove, tempMove, scale * 2);
+    vec3.scale(tempMove, tempMove, scale * 2);
     vec3.sub(positionDelta, positionDelta, tempMove);
   }
   if (currentlyPressedKeys[KEYS.D]) {
     vec3.cross(tempMove, direction, up);
-    multiplyScalar(tempMove, tempMove, scale * 2);
+    vec3.scale(tempMove, tempMove, scale * 2);
     vec3.add(positionDelta, positionDelta, tempMove);
   }
   if (currentlyPressedKeys[KEYS.W]) {
-    vec3.rotateY(tempMove, zeroDot, direction, 180 * Math.PI / 180);
-    multiplyScalar(tempMove, tempMove, scale);
+    vec3.rotateY(tempMove, zeroDot, direction, glMatrix.toRadian(180));
+    vec3.scale(tempMove, tempMove, scale);
     vec3.add(positionDelta, positionDelta, tempMove);
   }
   if (currentlyPressedKeys[KEYS.S]) {
-    vec3.rotateY(tempMove, zeroDot, direction, 180 * Math.PI / 180);
-    multiplyScalar(tempMove, tempMove, scale);
+    vec3.rotateY(tempMove, zeroDot, direction, glMatrix.toRadian(180));
+    vec3.scale(tempMove, tempMove, scale);
     vec3.sub(positionDelta, positionDelta, tempMove);
   }
 };

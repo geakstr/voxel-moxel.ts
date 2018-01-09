@@ -4,7 +4,7 @@ import { loadTextures, ATLAS } from "./textures";
 import * as camera from "./camera";
 import { KEYS } from "./keyboard";
 import { render } from "./renderer";
-import { createWorld } from "./world/world";
+import { createPlanet } from "./world/planet";
 import "./index.scss";
 
 window.addEventListener("load", () => {
@@ -49,7 +49,7 @@ window.addEventListener("load", () => {
     const gl = initGL(canvas);
     const shader = createShader(gl);
     loadTextures(gl);
-    const world = createWorld(gl);
-    render(gl, canvas, shader, world);
+    const planet = createPlanet(gl);
+    render(gl, canvas, shader, planet);
   }
 });

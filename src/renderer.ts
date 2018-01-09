@@ -1,7 +1,8 @@
 import { getUniform, SHADER_UNIFORM } from "./shaders";
 import * as camera from "./camera";
+import * as frustum from "./frustum";
 import { Chunk } from "./world/chunk";
-import { renderWorld } from "./world/world";
+import { renderPlanet } from "./world/planet";
 
 const fpsNode = document.querySelector("#fps")!;
 let now = 0;
@@ -13,11 +14,10 @@ export const render = (
   gl: WebGL2RenderingContext,
   canvas: HTMLCanvasElement,
   shaders: WebGLProgram,
-  world: Chunk[]
+  chunks: Chunk[]
 ) => {
   requestAnimationFrame(timeNow => {
-    render(gl, canvas, shaders, world);
-
+    render(gl, canvas, shaders, chunks);
     now = performance.now();
     fps++;
     elapsedTime += now - lastTime;
@@ -28,21 +28,19 @@ export const render = (
       elapsedTime -= 1000;
     }
   });
-  tick(gl, canvas, shaders, world);
+  tick(gl, canvas, shaders, chunks);
 };
 
 const tick = (
   gl: WebGL2RenderingContext,
   canvas: HTMLCanvasElement,
   shader: WebGLProgram,
-  world: Chunk[]
+  chunks: Chunk[]
 ) => {
   gl.viewport(0, 0, canvas.width, canvas.height);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-  gl.uniformMatrix4fv(
-    getUniform(SHADER_UNIFORM.MVP_MATRIX),
-    false,
-    camera.update(canvas.width / canvas.height)
-  );
-  renderWorld(gl, world);
+  const mvp = camera.update(canvas.width / canvas.height);
+  const frustumPlanes = frustum.update(mvp);
+  gl.uniformMatrix4fv(getUniform(SHADER_UNIFORM.MVP_MATRIX), false, mvp);
+  renderPlanet(gl, frustumPlanes, chunks);
 };
