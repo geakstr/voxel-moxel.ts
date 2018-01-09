@@ -41,7 +41,6 @@ export const createChunk = (
             CUBE_INT_TO_STRING_TYPE[cubeType] as any
           ] as ATLAS;
           const cube = createCube(
-            gl,
             xx,
             yy,
             zz,
@@ -53,7 +52,7 @@ export const createChunk = (
       }
     }
   }
-  const indicesCount = data.length / 7 * 3 / 2;
+  const indicesCount = data.length / 5 * 3 / 2;
   return {
     position: vec3.fromValues(xOffset, yOffset, zOffset),
     indicesCount,
@@ -93,7 +92,6 @@ export const renderChunk = (gl: WebGL2RenderingContext, chunk: Chunk) => {
   gl.activeTexture(gl.TEXTURE0);
   gl.bindTexture(gl.TEXTURE_2D, getAtlas());
   gl.uniform1i(getUniform(SHADER_UNIFORM.SAMPLER), 0);
-  gl.uniform2f(getUniform(SHADER_UNIFORM.TEX_INFO), ATLAS_SIZE, CROP_SIZE);
 
   gl.bindVertexArray(chunk.vao);
   gl.drawElements(gl.TRIANGLES, chunk.indicesCount, gl.UNSIGNED_INT, 0);

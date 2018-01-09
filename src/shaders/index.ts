@@ -27,11 +27,9 @@ export const createShader = (gl: WebGL2RenderingContext) => {
 
   attr(gl, shader, SHADER_ATTR.POSITION);
   attr(gl, shader, SHADER_ATTR.TEX_COORD);
-  attr(gl, shader, SHADER_ATTR.TEX_OFFSET);
 
   uniform(gl, shader, SHADER_UNIFORM.MVP_MATRIX);
   uniform(gl, shader, SHADER_UNIFORM.SAMPLER);
-  uniform(gl, shader, SHADER_UNIFORM.TEX_INFO);
 
   return shader;
 };

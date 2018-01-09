@@ -10,6 +10,15 @@ export const init = (canvas: HTMLCanvasElement) => {
     gl.enable(gl.DEPTH_TEST);
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      gl.viewport(0, 0, canvas.width, canvas.height);
+    });
+
     return gl;
   } catch (error) {
     throw error;

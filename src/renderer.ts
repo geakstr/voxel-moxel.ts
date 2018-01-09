@@ -18,6 +18,7 @@ export const render = (
 ) => {
   requestAnimationFrame(timeNow => {
     render(gl, canvas, shaders, chunks);
+
     now = performance.now();
     fps++;
     elapsedTime += now - lastTime;
@@ -27,20 +28,12 @@ export const render = (
       fps = 0;
       elapsedTime -= 1000;
     }
-  });
-  tick(gl, canvas, shaders, chunks);
-};
 
-const tick = (
-  gl: WebGL2RenderingContext,
-  canvas: HTMLCanvasElement,
-  shader: WebGLProgram,
-  chunks: Chunk[]
-) => {
-  gl.viewport(0, 0, canvas.width, canvas.height);
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-  const mvp = camera.update(canvas.width / canvas.height);
-  const frustumPlanes = frustum.update(mvp);
-  gl.uniformMatrix4fv(getUniform(SHADER_UNIFORM.MVP_MATRIX), false, mvp);
-  renderPlanet(gl, frustumPlanes, chunks);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    const mvp = camera.update(canvas.width / canvas.height);
+    const frustumPlanes = frustum.update(mvp);
+    gl.uniformMatrix4fv(getUniform(SHADER_UNIFORM.MVP_MATRIX), false, mvp);
+
+    renderPlanet(gl, frustumPlanes, chunks);
+  });
 };

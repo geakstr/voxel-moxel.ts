@@ -40,10 +40,6 @@ window.addEventListener("load", () => {
     },
     false
   );
-  window.addEventListener("resize", () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  });
 
   async function run() {
     const gl = initGL(canvas);

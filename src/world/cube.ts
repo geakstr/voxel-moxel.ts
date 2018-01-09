@@ -1,4 +1,5 @@
-import { ATLAS, getAtlasCoord } from "~/textures";
+import { ATLAS, GL_CROP_SIZE, getAtlasCoord } from "~/textures";
+import { CUBE_STRING_TO_INT_TYPE } from "./constants";
 
 export enum SIDE {
   ALL = "ALL",
@@ -10,104 +11,102 @@ export enum SIDE {
   BACK = "BACK"
 }
 
+export const SIDE_STRING_TO_INT_TYPE: {
+  [key: string]: number;
+} = {};
+
+export const SIDE_INT_TO_STRING_TYPE: {
+  [key: number]: string;
+} = {};
+
+Object.keys(SIDE).forEach((stringType, i) => {
+  SIDE_STRING_TO_INT_TYPE[stringType] = i + 1;
+  SIDE_INT_TO_STRING_TYPE[i + 1] = stringType;
+}, {});
+
 export const createCube = (
-  gl: WebGL2RenderingContext,
   x: number,
   y: number,
   z: number,
   texture: ATLAS,
   sides: SIDE[]
 ) => {
-  const vertices: number[] = [];
-  const texCoords: number[] = [];
-  const atlasCoord = getAtlasCoord(texture);
+  const data: number[] = [];
   sides.forEach(side => {
-    vertices.push(...translate(SIDES[side], x, y, z));
-    texCoords.push(...TEX_COORDS[side]);
+    for (let i = 0, v = 0, t = 0; i < 4; i += 1, v += 3, t += 2) {
+      const vertex = SIDES_MAP[side];
+      const texCoord = TEX_COORDS_MAP[side];
+      const texCoordOffset = getAtlasCoord(texture);
+      data.push(vertex[v] + x);
+      data.push(vertex[v + 1] + y);
+      data.push(vertex[v + 2] + z);
+      data.push(texCoord[t] + texCoordOffset[0]);
+      data.push(texCoord[t + 1] + texCoordOffset[1]);
+    }
   });
-
-  const data = [];
-  const count = vertices.length;
-  for (let v = 0, t = 0, to = 0; v < count; v += 3, t += 2, to += 2) {
-    data.push(vertices[v]);
-    data.push(vertices[v + 1]);
-    data.push(vertices[v + 2]);
-    data.push(texCoords[t]);
-    data.push(texCoords[t + 1]);
-    data.push(atlasCoord[0]);
-    data.push(atlasCoord[1]);
-  }
   return data;
 };
 
-const translate = (
-  vertices: number[],
-  xOffset: number,
-  yOffset: number,
-  zOffset: number
-) => {
-  const count = vertices.length;
-  const translatedVertices = [];
-  for (let i = 0; i < count; i += 3) {
-    translatedVertices.push(vertices[i] + xOffset);
-    translatedVertices.push(vertices[i + 1] + yOffset);
-    translatedVertices.push(vertices[i + 2] + zOffset);
-  }
-  return translatedVertices;
-};
+const VERTEX_0 = [0, 1, 1];
+const VERTEX_1 = [0, 0, 1];
+const VERTEX_2 = [1, 0, 1];
+const VERTEX_3 = [1, 1, 1];
+const VERTEX_4 = [0, 1, 0];
+const VERTEX_5 = [1, 1, 0];
+const VERTEX_6 = [1, 0, 0];
+const VERTEX_7 = [0, 0, 0];
+
+export const TEX_COORDS_0 = [0, 0];
+export const TEX_COORDS_1 = [0, 1 * GL_CROP_SIZE];
+export const TEX_COORDS_2 = [1 * GL_CROP_SIZE, 0];
+export const TEX_COORDS_3 = [1 * GL_CROP_SIZE, 1 * GL_CROP_SIZE];
 
 // prettier-ignore
 const FRONT_SIDE = [
-  // front
-  0, 0, 1, // v1
-  1, 0, 1, // v2
-  0, 1, 1, // v0
-  1, 1, 1, // v3
+  ...VERTEX_1,
+  ...VERTEX_2,
+  ...VERTEX_0,
+  ...VERTEX_3,
 ];
 
 // prettier-ignore
 const BACK_SIDE = [
-  // back
-  1, 0, 0, // v6
-  0, 0, 0, // v7
-  1, 1, 0, // v5
-  0, 1, 0, // v4
+  ...VERTEX_6,
+  ...VERTEX_7,
+  ...VERTEX_5,
+  ...VERTEX_4,
 ];
 
 // prettier-ignore
 const LEFT_SIDE = [
-  // left
-  0, 0, 0, // v7
-  0, 0, 1, // v1
-  0, 1, 0, // v4
-  0, 1, 1, // v0
+  ...VERTEX_7,
+  ...VERTEX_1,
+  ...VERTEX_4,
+  ...VERTEX_0,
 ];
 
 // prettier-ignore
 const RIGHT_SIDE = [
-  // right
-  1, 0, 1, // v2
-  1, 0, 0, // v6
-  1, 1, 1, // v3
-  1, 1, 0, // v5
+  ...VERTEX_2,
+  ...VERTEX_6,
+  ...VERTEX_3,
+  ...VERTEX_5,
 ];
 
 // prettier-ignore
 const TOP_SIDE = [
-  // top
-  0, 1, 1, // v0
-  1, 1, 1, // v3
-  0, 1, 0, // v4
-  1, 1, 0, // v5
+  ...VERTEX_0,
+  ...VERTEX_3,
+  ...VERTEX_4,
+  ...VERTEX_5,
 ];
 
 // prettier-ignore
 const BOTTOM_SIDE = [
-  // bottom
-  0, 0, 0, // v7
-  1, 0, 0, // v6
-  0, 0, 1, // v1
-  1, 0, 1, // v2
+  ...VERTEX_7,
+  ...VERTEX_6,
+  ...VERTEX_1,
+  ...VERTEX_2,
 ];
 
 // prettier-ignore
@@ -120,7 +119,7 @@ const ALL_SIDES = [
   ...BOTTOM_SIDE
 ];
 
-const SIDES: { [key: string]: number[] } = {
+const SIDES_MAP: { [key: string]: number[] } = {
   ALL: ALL_SIDES,
   LEFT: LEFT_SIDE,
   RIGHT: RIGHT_SIDE,
@@ -132,44 +131,35 @@ const SIDES: { [key: string]: number[] } = {
 
 // prettier-ignore
 const FRONT_TEX_COORDS = [
-  // front
-  0, 1, 1, 1,
-  0, 0, 1, 0,  
+  ...TEX_COORDS_1, ...TEX_COORDS_3,
+  ...TEX_COORDS_0, ...TEX_COORDS_2
 ];
 
 // prettier-ignore
 const BACK_TEX_COORDS = [
-  // back
-  0, 1, 1, 1,
-  0, 0, 1, 0,  
+  ...FRONT_TEX_COORDS
 ];
 
 // prettier-ignore
 const LEFT_TEX_COORDS = [  
-  // left
-  1, 1, 0, 1,
-  1, 0, 0, 0,  
+  ...TEX_COORDS_3, ...TEX_COORDS_1,
+  ...TEX_COORDS_2, ...TEX_COORDS_0,  
 ];
 
 // prettier-ignore
 const RIGHT_TEX_COORDS = [
-  // right
-  1, 1, 0, 1,
-  1, 0, 0, 0,
+  ...LEFT_TEX_COORDS
 ];
 
 // prettier-ignore
 const TOP_TEX_COORDS = [
-  // top
-  0, 1, 1, 1,
-  0, 0, 1, 0
+  ...TEX_COORDS_1, ...TEX_COORDS_3,
+  ...TEX_COORDS_0, ...TEX_COORDS_2
 ];
 
 // prettier-ignore
 const BOTTOM_TEX_COORDS = [
-  // bottom
-  0, 1, 1, 1,
-  0, 0, 1, 0
+  ...TOP_TEX_COORDS
 ];
 
 // prettier-ignore
@@ -182,7 +172,7 @@ const ALL_TEX_COORDS = [
   ...BOTTOM_TEX_COORDS
 ];
 
-const TEX_COORDS: { [key: string]: number[] } = {
+const TEX_COORDS_MAP: { [key: string]: number[] } = {
   ALL: ALL_TEX_COORDS,
   LEFT: LEFT_TEX_COORDS,
   RIGHT: RIGHT_TEX_COORDS,

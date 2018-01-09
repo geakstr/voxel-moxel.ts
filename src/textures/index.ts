@@ -1,7 +1,13 @@
 import { ATLAS, TEXTURE, TEXTURE_SRC } from "./constants";
-import { fillAtlas, getAtlasCoord } from "./atlas";
+import { getAtlasCoord } from "./atlas";
 
-export { ATLAS, ATLAS_SIZE, CROP_SIZE } from "./constants";
+export {
+  ATLAS,
+  ATLAS_SIZE,
+  CROP_SIZE,
+  GL_PIXEL_SIZE,
+  GL_CROP_SIZE
+} from "./constants";
 export { getAtlasCoord } from "./atlas";
 
 const texturesMap: { [key: string]: WebGLTextureExtended } = {};
@@ -32,7 +38,6 @@ export const getRandomTexture = () => {
 export const getAtlas = () => getTexture(TEXTURE.ATLAS);
 
 export const loadTextures = (gl: WebGL2RenderingContext) => {
-  fillAtlas();
   addTexture(gl, TEXTURE.ATLAS, TEXTURE_SRC.ATLAS);
 };
 

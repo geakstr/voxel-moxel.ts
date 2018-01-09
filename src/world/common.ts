@@ -18,8 +18,6 @@ export const createVertexArray = (
   bytes += 12;
   gl.enableVertexAttribArray(getAttr(SHADER_ATTR.TEX_COORD));
   bytes += 8;
-  gl.enableVertexAttribArray(getAttr(SHADER_ATTR.TEX_OFFSET));
-  bytes += 8;
 
   let bytesOffset = 0;
   gl.vertexAttribPointer(
@@ -33,15 +31,6 @@ export const createVertexArray = (
   bytesOffset += 12;
   gl.vertexAttribPointer(
     getAttr(SHADER_ATTR.TEX_COORD),
-    2,
-    gl.FLOAT,
-    false,
-    bytes,
-    bytesOffset
-  );
-  bytesOffset += 8;
-  gl.vertexAttribPointer(
-    getAttr(SHADER_ATTR.TEX_OFFSET),
     2,
     gl.FLOAT,
     false,
