@@ -1,9 +1,10 @@
 {
-  "name": "voxel-moxel.js",
+  "name": "voxel-moxel.ts",
   "version": "0.1.0",
-  "description": "just for fun voxel game like minecraft written on js",
-  "main": "lib/index.js",
-  "repository": "https://github.com/geakstr/voxel-moxel.js",
+  "description":
+    "just for fun voxel game like minecraft written on typescript on top of webgl",
+  "main": "src/index.tsx",
+  "repository": "https://github.com/geakstr/voxel-moxel.ts",
   "author": "geakstr <geakstr@me.com>",
   "license": "MIT",
   "private": false,
