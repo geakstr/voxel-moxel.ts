@@ -5,7 +5,6 @@ import { Universe } from "../types";
 import { renderUniverse } from "./universe";
 
 const fpsNode = document.querySelector("#fps")!;
-let now = 0;
 let elapsedTime = 0;
 let fps = 0;
 let lastTime = performance.now();
@@ -16,10 +15,7 @@ export const render = (
   shaders: WebGLProgram,
   universe: Universe
 ) => {
-  requestAnimationFrame(timeNow => {
-    render(gl, canvas, shaders, universe);
-
-    now = performance.now();
+  requestAnimationFrame(now => {
     fps++;
     elapsedTime += now - lastTime;
     lastTime = now;
@@ -35,5 +31,7 @@ export const render = (
     gl.uniformMatrix4fv(getUniform(SHADER_UNIFORM.MVP_MATRIX), false, mvp);
 
     renderUniverse(gl, frustumPlanes, universe);
+
+    render(gl, canvas, shaders, universe);
   });
 };
