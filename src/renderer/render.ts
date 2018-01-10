@@ -15,7 +15,7 @@ export const render = (
   shaders: WebGLProgram,
   universe: Universe
 ) => {
-  requestAnimationFrame(now => {
+  const onAnimationFrame = (now: number) => {
     fps++;
     elapsedTime += now - lastTime;
     lastTime = now;
@@ -32,6 +32,11 @@ export const render = (
 
     renderUniverse(gl, frustumPlanes, universe);
 
-    render(gl, canvas, shaders, universe);
-  });
+    tick(onAnimationFrame);
+  };
+
+  tick(onAnimationFrame);
 };
+
+const tick = (onAnimationFrame: (now: number) => void) =>
+  requestAnimationFrame(onAnimationFrame);

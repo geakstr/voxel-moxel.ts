@@ -17,7 +17,8 @@
       "NODE_ENV=production webpack --colors --config ./configs/webpack.planet.worker.production.js",
     "build-app":
       "rm -rf ./lib/* && NODE_ENV=production webpack --colors --config ./configs/webpack.app.production.js",
-    "build": "yarn build-app && yarn build-planet-worker"
+    "build": "yarn build-app && yarn build-planet-worker",
+    "deploy": "yarn build && surge --project ./lib"
   },
   "devDependencies": {
     "@types/gl-matrix": "2.4.0",
