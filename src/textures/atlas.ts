@@ -1,14 +1,13 @@
-import { ATLAS, GL_CROP_SIZE } from "./constants";
-import { atlas } from "./atlas-map";
+import { ATLAS, ATLAS_MAP, GL_CROP_SIZE } from "../constants";
 
 export const getAtlasCoords = () => coords;
 export const getAtlasCoord = (textureName: ATLAS) => coords[textureName];
 
 const coords: { [key: string]: number[] } = {};
 
-Object.keys(atlas).forEach(textureName => {
+Object.keys(ATLAS_MAP).forEach(textureName => {
   coords[textureName] = [
-    atlas[textureName][0] * GL_CROP_SIZE,
-    atlas[textureName][1] * GL_CROP_SIZE
+    ATLAS_MAP[textureName][0] * GL_CROP_SIZE,
+    ATLAS_MAP[textureName][1] * GL_CROP_SIZE
   ];
 });

@@ -9,9 +9,14 @@
   "private": false,
   "scripts": {
     "test": "exit 0",
-    "start": "NODE_ENV=development node ./dev-server.js",
-    "watch-planet-worker": "NODE_ENV=development webpack --watch --colors --config ./configs/webpack.planet.worker.development.js",
-    "build": "rm -rf ./lib/* && NODE_ENV=production webpack --colors --config ./configs/webpack.app.production.js"
+    "start-app": "NODE_ENV=development node ./dev-server.js",
+    "start-planet-worker":
+      "NODE_ENV=development webpack --watch --colors --config ./configs/webpack.planet.worker.development.js",
+    "build-planet-worker":
+      "NODE_ENV=production webpack --colors --config ./configs/webpack.planet.worker.production.js",
+    "build-app":
+      "rm -rf ./lib/* && NODE_ENV=production webpack --colors --config ./configs/webpack.app.production.js",
+    "build": "yarn build-app && yarn build-planet-worker"
   },
   "devDependencies": {
     "@types/gl-matrix": "2.4.0",

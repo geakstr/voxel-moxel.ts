@@ -1,10 +1,7 @@
-import { vec4 } from "gl-matrix";
-import * as frustum from "../frustum";
-import { createVertexArray } from "./common";
-import { renderChunk } from "./chunk";
-import { Planet } from "./types";
+import { Planet } from "../types";
+import { createVertexArray } from "./createVertexArray";
 
-const worker = new Worker("/assets/planet.worker.js");
+const worker = new Worker("/workers/planet.worker.js");
 
 export const createPlanet = (
   gl: WebGL2RenderingContext,
@@ -37,6 +34,7 @@ export const createPlanet = (
                 chunk.data!,
                 chunk.indicesCount
               );
+              delete chunk.data;
             });
             planet.blocks = newPlanet.blocks;
             planet.ready = true;
@@ -57,18 +55,4 @@ export const createPlanet = (
   });
 
   return planet;
-};
-
-export const renderPlanet = (
-  gl: WebGL2RenderingContext,
-  frustumPlanes: vec4[],
-  planet: Planet
-) => {
-  const count = planet.chunks.length;
-  for (let i = 0; i < count; i += 1) {
-    const chunk = planet.chunks[i];
-    if (frustum.isChunkInFrustum(frustumPlanes, chunk)) {
-      renderChunk(gl, chunk);
-    }
-  }
 };

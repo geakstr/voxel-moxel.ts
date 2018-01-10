@@ -1,10 +1,10 @@
-import { init as initGL } from "./gl";
+import { KEYBOARD } from "./constants";
 import { createShader } from "./shaders";
-import { loadTextures, ATLAS } from "./textures";
-import * as camera from "./camera";
-import { KEYS } from "./keyboard";
-import { render } from "./renderer";
-import { createUniverse } from "./world/universe";
+import { loadTextures } from "./textures";
+import { createGl } from "./renderer/gl";
+import * as camera from "./renderer/camera";
+import { render } from "./renderer/render";
+import { createUniverse } from "./world/createUniverse";
 import "./index.scss";
 
 window.addEventListener("load", () => {
@@ -13,6 +13,7 @@ window.addEventListener("load", () => {
   run();
 
   canvas.addEventListener("click", canvas.requestPointerLock, false);
+
   document.addEventListener(
     "pointerlockchange",
     (event: PointerEvent) => {
@@ -24,10 +25,11 @@ window.addEventListener("load", () => {
     },
     false
   );
+
   document.addEventListener(
     "keydown",
     (event: KeyboardEvent) => {
-      if (event.keyCode === KEYS.ENTER) {
+      if (event.keyCode === KEYBOARD.ENTER) {
         const element = canvas as any;
         if (element.requestFullScreen) {
           element.requestFullScreen();
@@ -42,7 +44,7 @@ window.addEventListener("load", () => {
   );
 
   async function run() {
-    const gl = initGL(canvas);
+    const gl = createGl(canvas);
     const shader = createShader(gl);
     loadTextures(gl);
     const universe = createUniverse(gl);

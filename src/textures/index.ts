@@ -1,21 +1,12 @@
-import { ATLAS, TEXTURE, TEXTURE_SRC } from "./constants";
+import { ATLAS, TEXTURE, TEXTURE_SRC } from "../constants";
 import { getAtlasCoord } from "./atlas";
-
-export {
-  ATLAS,
-  ATLAS_SIZE,
-  CROP_SIZE,
-  GL_PIXEL_SIZE,
-  GL_CROP_SIZE
-} from "./constants";
-export { getAtlasCoord } from "./atlas";
 
 const texturesMap: { [key: string]: WebGLTextureExtended } = {};
 
-export class WebGLTextureExtended extends WebGLTexture {
-  public image: HTMLImageElement;
-}
-
+export const getTexture = (name: TEXTURE) => texturesMap[name];
+export const getAtlas = () => getTexture(TEXTURE.ATLAS);
+export const loadTextures = (gl: WebGL2RenderingContext) =>
+  addTexture(gl, TEXTURE.ATLAS, TEXTURE_SRC.ATLAS);
 export const addTexture = (
   gl: WebGL2RenderingContext,
   name: TEXTURE,
@@ -24,14 +15,6 @@ export const addTexture = (
   const texture = createTexture(gl, src);
   texturesMap[name] = texture;
   return texture;
-};
-
-export const getTexture = (name: TEXTURE) => texturesMap[name];
-export { getRandomTexture } from "./getRandomTexture";
-export const getAtlas = () => getTexture(TEXTURE.ATLAS);
-
-export const loadTextures = (gl: WebGL2RenderingContext) => {
-  addTexture(gl, TEXTURE.ATLAS, TEXTURE_SRC.ATLAS);
 };
 
 const createTexture = (gl: WebGL2RenderingContext, src: string) => {
@@ -65,4 +48,6 @@ const handleLoadedTexture = (
   gl.bindTexture(gl.TEXTURE_2D, null);
 };
 
-const isPowerOf2 = (value: number) => (value & (value - 1)) == 0;
+class WebGLTextureExtended extends WebGLTexture {
+  public image: HTMLImageElement;
+}

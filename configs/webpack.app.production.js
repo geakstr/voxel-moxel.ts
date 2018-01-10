@@ -16,8 +16,7 @@ const { SOURCE_MAP_EXPLORER } = process.env;
 module.exports = webpackMerge(commonConfig, {
   bail: true,
   entry: {
-    app: path.resolve(src, "./index.tsx"),
-    planetWorker: path.resolve(src, "./world/planet.worker.ts")
+    app: path.resolve(src, "./index.tsx")
   },
   output: {
     path: path.resolve(root, "lib"),

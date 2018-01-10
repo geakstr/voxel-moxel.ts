@@ -19,13 +19,3 @@ export interface Planet {
   z: number;
   ready: boolean;
 }
-
-export enum SIDE {
-  ALL = "ALL",
-  LEFT = "LEFT",
-  RIGHT = "RIGHT",
-  TOP = "TOP",
-  BOTTOM = "BOTTOM",
-  FRONT = "FRONT",
-  BACK = "BACK"
-}

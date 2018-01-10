@@ -1,8 +1,6 @@
 import { getAtlas } from "../textures";
 import { getUniform, SHADER_UNIFORM } from "../shaders";
-import { Chunk } from "./types";
-
-export { createChunk } from "./createChunk";
+import { Chunk } from "../types";
 
 export const renderChunk = (gl: WebGL2RenderingContext, chunk: Chunk) => {
   gl.activeTexture(gl.TEXTURE0);

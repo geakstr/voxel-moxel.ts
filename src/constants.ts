@@ -1,11 +1,102 @@
-import { ATLAS, GL_CROP_SIZE } from "../textures/constants";
-import { SIDE } from "./types";
-
 export const UNIVERSE_SIZE = 1;
-export const CHUNK_SIZE = 32;
+export const CHUNK_SIZE = 16;
 export const HALF_CHUNK_SIZE = CHUNK_SIZE / 2;
-export const PLANET_SIZE = 6;
+export const PLANET_SIZE = 3;
 export const PLANET_BORDER = PLANET_SIZE * CHUNK_SIZE - 1;
+
+export const ATLAS_SIZE = 80;
+export const CROP_SIZE = 16;
+
+export const GL_PIXEL_SIZE = 1.0 / ATLAS_SIZE;
+export const GL_CROP_SIZE = GL_PIXEL_SIZE * CROP_SIZE;
+
+export enum ATLAS {
+  COBBLESTONE = "COBBLESTONE",
+  GRASS = "GRASS",
+  STONE = "STONE",
+  DIRT = "DIRT",
+  DIRT_WITH_GRASS = "DIRT_WITH_GRASS",
+  WOOD_0 = "WOOD_0",
+  BEDROCK = "BEDROCK",
+  SAND = "SAND",
+  GRAVEL = "GRAVEL",
+  WOOD = "WOOD",
+  GOLD_ORE = "GOLD_ORE",
+  IRON_ORE = "IRON_ORE",
+  COAL_ORE = "COAL_ORE",
+  BOOKSHELF = "BOOKSHELF",
+  MOSS_STONE = "MOSS_STONE",
+  SPONGE = "SPONGE",
+  GLASS = "GLASS",
+  DIAMOND_ORE = "DIAMOND_ORE",
+  REDSTONE_ORE = "REDSTONE_ORE",
+  LEAVES = "LEAVES",
+  WOOL = "WOOL",
+  MONSTER_SPAWNER = "MONSTER_SPAWNER",
+  SNOW = "snSNOWow",
+  ICE = "ICE",
+  DIRT_WITH_SNOW = "DIRT_WITH_SNOW"
+}
+
+export enum TEXTURE {
+  ATLAS = "ATLAS"
+}
+
+export enum SIDE {
+  ALL = "ALL",
+  LEFT = "LEFT",
+  RIGHT = "RIGHT",
+  TOP = "TOP",
+  BOTTOM = "BOTTOM",
+  FRONT = "FRONT",
+  BACK = "BACK"
+}
+
+export const KEYBOARD = {
+  W: 87,
+  S: 83,
+  A: 65,
+  D: 68,
+  SPACE: 32,
+  L_SHIFT: 16,
+  ENTER: 13
+};
+
+export const ATLAS_MAP: { [key: string]: number[] } = {
+  [ATLAS.GRASS]: [0, 0],
+  [ATLAS.STONE]: [1, 0],
+  [ATLAS.DIRT]: [2, 0],
+  [ATLAS.DIRT_WITH_GRASS]: [3, 0],
+  [ATLAS.WOOD_0]: [4, 0],
+
+  [ATLAS.COBBLESTONE]: [0, 1],
+  [ATLAS.BEDROCK]: [1, 1],
+  [ATLAS.SAND]: [2, 1],
+  [ATLAS.GRAVEL]: [3, 1],
+  [ATLAS.WOOD]: [4, 1],
+
+  [ATLAS.GOLD_ORE]: [0, 2],
+  [ATLAS.IRON_ORE]: [1, 2],
+  [ATLAS.COAL_ORE]: [2, 2],
+  [ATLAS.BOOKSHELF]: [3, 2],
+  [ATLAS.MOSS_STONE]: [4, 2],
+
+  [ATLAS.SPONGE]: [0, 3],
+  [ATLAS.GLASS]: [1, 3],
+  [ATLAS.DIAMOND_ORE]: [2, 3],
+  [ATLAS.REDSTONE_ORE]: [3, 3],
+  [ATLAS.LEAVES]: [4, 3],
+
+  [ATLAS.WOOL]: [0, 4],
+  [ATLAS.MONSTER_SPAWNER]: [1, 4],
+  [ATLAS.SNOW]: [2, 4],
+  [ATLAS.ICE]: [3, 4],
+  [ATLAS.DIRT_WITH_SNOW]: [4, 4]
+};
+
+export enum TEXTURE_SRC {
+  ATLAS = "./assets/atlas.png"
+}
 
 export const CUBE_STRING_TO_INT_TYPE: {
   [key: string]: number;

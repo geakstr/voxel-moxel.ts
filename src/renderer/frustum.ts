@@ -1,6 +1,6 @@
 import { mat4, vec3, vec4 } from "gl-matrix";
-import { Chunk } from "./world/types";
-import { HALF_CHUNK_SIZE, CHUNK_SIZE } from "./world/constants";
+import { Chunk } from "../types";
+import { HALF_CHUNK_SIZE, CHUNK_SIZE } from "../constants";
 
 const matrix: mat4 = mat4.create();
 

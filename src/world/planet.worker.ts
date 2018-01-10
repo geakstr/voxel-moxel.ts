@@ -1,7 +1,11 @@
 import { getRandomTexture } from "../textures/getRandomTexture";
-import { ATLAS } from "../textures/constants";
-import { CUBE_STRING_TO_INT_TYPE, PLANET_SIZE, CHUNK_SIZE } from "./constants";
-import { Planet, Chunk } from "./types";
+import {
+  ATLAS,
+  CUBE_STRING_TO_INT_TYPE,
+  PLANET_SIZE,
+  CHUNK_SIZE
+} from "../constants";
+import { Planet, Chunk } from "../types";
 import { createChunk } from "./createChunk";
 
 self.addEventListener(

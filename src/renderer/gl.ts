@@ -1,4 +1,4 @@
-export const init = (canvas: HTMLCanvasElement) => {
+export const createGl = (canvas: HTMLCanvasElement) => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   try {

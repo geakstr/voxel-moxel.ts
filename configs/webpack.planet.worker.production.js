@@ -1,14 +1,16 @@
 const path = require("path");
 const webpack = require("webpack");
 const webpackMerge = require("webpack-merge");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
-const { CheckerPlugin } = require("awesome-typescript-loader");
+const MinifyPlugin = require("babel-minify-webpack-plugin");
 
 const root = path.resolve(__dirname, "../");
 const src = path.resolve(root, "./src");
 const commonConfig = require("./webpack.planet.worker.base.js");
 
+const { SOURCE_MAP_EXPLORER } = process.env;
+
 module.exports = webpackMerge(commonConfig, {
+  bail: true,
   entry: {
     "planet.worker": path.resolve(src, "./world/planet.worker.ts")
   },
@@ -19,12 +21,16 @@ module.exports = webpackMerge(commonConfig, {
     sourceMapFilename: "[name].map",
     publicPath: "/"
   },
-  devtool: "cheap-source-map",
+  devtool: SOURCE_MAP_EXPLORER ? "source-map" : "cheap-source-map",
   plugins: [
-    new webpack.NamedModulesPlugin(),
     new webpack.DefinePlugin({
-      "process.env.NODE_ENV": JSON.stringify("development")
+      "process.env.NODE_ENV": JSON.stringify("production")
     }),
-    new CheckerPlugin()
-  ]
+    new webpack.optimize.ModuleConcatenationPlugin(),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true,
+      debug: false
+    }),
+    SOURCE_MAP_EXPLORER ? null : new MinifyPlugin({}, {})
+  ].filter(p => p)
 });

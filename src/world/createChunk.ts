@@ -1,10 +1,11 @@
-import { ATLAS } from "../textures/constants";
-import { Chunk, SIDE } from "./types";
+import { Chunk } from "../types";
 import {
+  ATLAS,
   CHUNK_SIZE,
   PLANET_BORDER,
-  CUBE_INT_TO_STRING_TYPE
-} from "./constants";
+  CUBE_INT_TO_STRING_TYPE,
+  SIDE
+} from "../constants";
 import { createCube } from "./createCube";
 
 export const createChunk = (

@@ -21,7 +21,7 @@ const wds = new WebpackDevServer(webpack(config), {
   stats: "errors-only",
   overlay: true,
   before(app) {
-    app.use("/assets", express.static(path.resolve(__dirname, "lib")));
+    app.use("/workers", express.static(path.resolve(__dirname, "lib/workers")));
   }
 });
 

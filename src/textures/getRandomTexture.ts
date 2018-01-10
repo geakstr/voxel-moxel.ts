@@ -1,4 +1,4 @@
-import { ATLAS } from "./constants";
+import { ATLAS } from "../constants";
 
 export const getRandomTexture = () => {
   const keys = Object.keys(ATLAS);

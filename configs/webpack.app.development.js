@@ -19,8 +19,7 @@ module.exports = webpackMerge(commonConfig, {
       `webpack-dev-server/client?${shema}://localhost:${port}`,
       "webpack/hot/only-dev-server",
       path.resolve(src, "./index.tsx")
-    ],
-    planetWorker: path.resolve(src, "./world/planet.worker.ts")
+    ]
   },
   output: {
     filename: "[name].js",

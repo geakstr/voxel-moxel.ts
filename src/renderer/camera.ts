@@ -1,5 +1,5 @@
 import { mat4, vec3, quat, glMatrix } from "gl-matrix";
-import { KEYS } from "./keyboard";
+import { CHUNK_SIZE, PLANET_SIZE, KEYBOARD } from "../constants";
 
 export const projection: mat4 = mat4.create();
 export const view: mat4 = mat4.create();
@@ -7,7 +7,11 @@ export const model: mat4 = mat4.create();
 export const mvp: mat4 = mat4.create();
 
 export const lookAt: vec3 = vec3.fromValues(0, 0, 2);
-export const position: vec3 = vec3.fromValues(5, 5, 2);
+export const position: vec3 = vec3.fromValues(
+  CHUNK_SIZE * PLANET_SIZE / 2,
+  CHUNK_SIZE * PLANET_SIZE + CHUNK_SIZE / 2,
+  CHUNK_SIZE * PLANET_SIZE / 2
+);
 export const direction: vec3 = vec3.fromValues(0, 0, 1);
 export const up: vec3 = vec3.fromValues(0, 1, 0);
 export const front: vec3 = vec3.fromValues(0, 0, 1);
@@ -125,32 +129,32 @@ const changeYaw = (degrees: number) => {
 };
 
 const move = () => {
-  if (currentlyPressedKeys[KEYS.SPACE]) {
+  if (currentlyPressedKeys[KEYBOARD.SPACE]) {
     vec3.copy(tempMove, up);
     vec3.scale(tempMove, tempMove, scale);
     vec3.add(positionDelta, positionDelta, tempMove);
   }
-  if (currentlyPressedKeys[KEYS.L_SHIFT]) {
+  if (currentlyPressedKeys[KEYBOARD.L_SHIFT]) {
     vec3.copy(tempMove, up);
     vec3.scale(tempMove, tempMove, scale);
     vec3.sub(positionDelta, positionDelta, tempMove);
   }
-  if (currentlyPressedKeys[KEYS.A]) {
+  if (currentlyPressedKeys[KEYBOARD.A]) {
     vec3.cross(tempMove, direction, up);
     vec3.scale(tempMove, tempMove, scale * 2);
     vec3.sub(positionDelta, positionDelta, tempMove);
   }
-  if (currentlyPressedKeys[KEYS.D]) {
+  if (currentlyPressedKeys[KEYBOARD.D]) {
     vec3.cross(tempMove, direction, up);
     vec3.scale(tempMove, tempMove, scale * 2);
     vec3.add(positionDelta, positionDelta, tempMove);
   }
-  if (currentlyPressedKeys[KEYS.W]) {
+  if (currentlyPressedKeys[KEYBOARD.W]) {
     vec3.rotateY(tempMove, zeroDot, direction, glMatrix.toRadian(180));
     vec3.scale(tempMove, tempMove, scale);
     vec3.add(positionDelta, positionDelta, tempMove);
   }
-  if (currentlyPressedKeys[KEYS.S]) {
+  if (currentlyPressedKeys[KEYBOARD.S]) {
     vec3.rotateY(tempMove, zeroDot, direction, glMatrix.toRadian(180));
     vec3.scale(tempMove, tempMove, scale);
     vec3.sub(positionDelta, positionDelta, tempMove);
