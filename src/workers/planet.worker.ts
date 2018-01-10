@@ -6,7 +6,7 @@ import {
   CHUNK_SIZE
 } from "../constants";
 import { Planet, Chunk } from "../types";
-import { createChunk } from "./createChunk";
+import { createChunk } from "../world/createChunk";
 
 self.addEventListener(
   "message",

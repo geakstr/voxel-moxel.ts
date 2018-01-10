@@ -12,7 +12,7 @@ const { SOURCE_MAP_EXPLORER } = process.env;
 module.exports = webpackMerge(commonConfig, {
   bail: true,
   entry: {
-    "planet.worker": path.resolve(src, "./world/planet.worker.ts")
+    "planet.worker": path.resolve(src, "./workers/planet.worker.ts")
   },
   output: {
     path: path.resolve(root, "lib/workers"),

@@ -10,7 +10,7 @@ const commonConfig = require("./webpack.planet.worker.base.js");
 
 module.exports = webpackMerge(commonConfig, {
   entry: {
-    "planet.worker": path.resolve(src, "./world/planet.worker.ts")
+    "planet.worker": path.resolve(src, "./workers/planet.worker.ts")
   },
   output: {
     path: path.resolve(root, "lib/workers"),
