@@ -67,9 +67,9 @@ export const update = (mvp: mat4) => {
 
 export const isChunkInFrustum = (planes: vec4[], chunk: Chunk) => {
   const center = vec3.fromValues(
-    chunk.position[0] + HALF_CHUNK_SIZE + 0.5,
-    chunk.position[1] + HALF_CHUNK_SIZE + 0.5,
-    chunk.position[2] + HALF_CHUNK_SIZE + 0.5
+    chunk.x + HALF_CHUNK_SIZE + 0.5,
+    chunk.y + HALF_CHUNK_SIZE + 0.5,
+    chunk.z + HALF_CHUNK_SIZE + 0.5
   );
   for (let i = 0; i < 6; i++) {
     const d =

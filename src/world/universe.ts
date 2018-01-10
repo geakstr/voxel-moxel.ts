@@ -1,11 +1,7 @@
 import { vec4 } from "gl-matrix";
 import { UNIVERSE_SIZE } from "./constants";
-import { Planet } from "./types";
+import { Planet, Universe } from "./types";
 import { createPlanet, renderPlanet } from "./planet";
-
-export interface Universe {
-  readonly planets: Planet[];
-}
 
 export const createUniverse = (gl: WebGL2RenderingContext): Universe => {
   const planets: Planet[] = [];

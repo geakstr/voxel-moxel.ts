@@ -1,7 +1,8 @@
 import { getUniform, SHADER_UNIFORM } from "./shaders";
 import * as camera from "./camera";
 import * as frustum from "./frustum";
-import { Universe, renderUniverse } from "./world/universe";
+import { Universe } from "./world/types";
+import { renderUniverse } from "./world/universe";
 
 const fpsNode = document.querySelector("#fps")!;
 let now = 0;

@@ -1,7 +1,11 @@
-import { vec3 } from "gl-matrix";
+export interface Universe {
+  readonly planets: Planet[];
+}
 
 export interface Chunk {
-  position: vec3;
+  x: number;
+  y: number;
+  z: number;
   indicesCount: number;
   data?: Float32Array;
   vao?: WebGLVertexArrayObject;
