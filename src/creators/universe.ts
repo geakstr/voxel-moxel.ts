@@ -1,6 +1,6 @@
 import { UNIVERSE_SIZE } from "../constants";
 import { Planet, Universe } from "../types";
-import { createPlanet } from "./createPlanet";
+import { createPlanet } from "./planet";
 
 export const createUniverse = (gl: WebGL2RenderingContext): Universe => {
   const planets: Planet[] = [];

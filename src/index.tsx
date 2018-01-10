@@ -4,7 +4,7 @@ import { loadTextures } from "./textures";
 import { createGl } from "./renderer/gl";
 import * as camera from "./renderer/camera";
 import { render } from "./renderer/render";
-import { createUniverse } from "./world/createUniverse";
+import { createUniverse } from "./creators/universe";
 import "./index.scss";
 
 window.addEventListener("load", () => {

@@ -3,10 +3,10 @@ import {
   ATLAS,
   CHUNK_SIZE,
   PLANET_BORDER,
-  CUBE_INT_TO_STRING_TYPE,
+  BLOCK_INT_TO_STRING_TYPE,
   SIDE
 } from "../constants";
-import { createCube } from "./createCube";
+import { createBlock } from "./block";
 
 export const createChunk = (
   blocks: number[][][],
@@ -21,25 +21,25 @@ export const createChunk = (
   for (let blockX = 0; blockX < CHUNK_SIZE; blockX += 1) {
     for (let blockY = 0; blockY < CHUNK_SIZE; blockY += 1) {
       for (let blockZ = 0; blockZ < CHUNK_SIZE; blockZ += 1) {
-        const cubeType =
+        const blockType =
           blocks[chunkXOffset + blockX][chunkYOffset + blockY][
             chunkZOffset + blockZ
           ];
-        if (typeof cubeType !== "undefined") {
+        if (typeof blockType !== "undefined") {
           const xx = blockX + chunkXOffset;
           const yy = blockY + chunkYOffset;
           const zz = blockZ + chunkZOffset;
           const texture = ATLAS[
-            CUBE_INT_TO_STRING_TYPE[cubeType] as any
+            BLOCK_INT_TO_STRING_TYPE[blockType] as any
           ] as ATLAS;
-          const cube = createCube(
+          const block = createBlock(
             xx + planetXOffset,
             yy + planetYOffset,
             zz + planetZOffset,
             texture,
             renderableSides(blocks, xx, yy, zz)
           );
-          data.push(...cube);
+          data.push(...block);
         }
       }
     }

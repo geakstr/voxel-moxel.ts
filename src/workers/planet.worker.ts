@@ -1,12 +1,12 @@
 import { getRandomTexture } from "../textures/getRandomTexture";
 import {
   ATLAS,
-  CUBE_STRING_TO_INT_TYPE,
+  BLOCK_STRING_TO_INT_TYPE,
   PLANET_SIZE,
   CHUNK_SIZE
 } from "../constants";
 import { Planet, Chunk } from "../types";
-import { createChunk } from "../world/createChunk";
+import { createChunk } from "../creators/chunk";
 
 self.addEventListener(
   "message",
@@ -51,7 +51,7 @@ const genBlocks = () => {
 
   //     for (let y = 0; y < topY; y++) {
   //       const tex = getRandomTexture();
-  //       blocks[x][y][z] = CUBE_STRING_TO_INT_TYPE[tex];
+  //       blocks[x][y][z] = BLOCK_STRING_TO_INT_TYPE[tex];
   //     }
   //   }
   // }
@@ -61,7 +61,7 @@ const genBlocks = () => {
       for (let z = 0; z < PLANET_SIZE * CHUNK_SIZE; z += 1) {
         // if (Math.random() >= 0.49) {
         const tex = getRandomTexture();
-        blocks[x][y][z] = CUBE_STRING_TO_INT_TYPE[tex];
+        blocks[x][y][z] = BLOCK_STRING_TO_INT_TYPE[tex];
         // }
       }
     }

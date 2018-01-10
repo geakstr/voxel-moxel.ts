@@ -1,4 +1,3 @@
-import * as is from "is";
 import { SHADER_ATTR, SHADER_UNIFORM, SHADER_IN_OUT } from "./types";
 import { VERTEX_SHADER } from "./vertex.shader";
 import { FRAGMENT_SHADER } from "./fragment.shader";

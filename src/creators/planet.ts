@@ -1,5 +1,5 @@
 import { Planet } from "../types";
-import { createVertexArray } from "./createVertexArray";
+import { createVertexArray } from "./vao";
 
 const worker = new Worker("/workers/planet.worker.js");
 

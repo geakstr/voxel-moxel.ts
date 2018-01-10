@@ -1,7 +1,7 @@
 import { ATLAS, SIDES_MAP, TEX_COORDS_MAP, SIDE } from "../constants";
 import { getAtlasCoord } from "../textures/atlas";
 
-export const createCube = (
+export const createBlock = (
   x: number,
   y: number,
   z: number,

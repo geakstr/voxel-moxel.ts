@@ -1,7 +1,7 @@
 import { vec4 } from "gl-matrix";
 import { Planet } from "../types";
 import * as frustum from "./frustum";
-import { renderChunk } from "./renderChunk";
+import { renderChunk } from "./chunk";
 
 export const renderPlanet = (
   gl: WebGL2RenderingContext,

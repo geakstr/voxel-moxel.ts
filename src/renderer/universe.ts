@@ -1,6 +1,6 @@
 import { vec4 } from "gl-matrix";
 import { Universe } from "../types";
-import { renderPlanet } from "./renderPlanet";
+import { renderPlanet } from "./planet";
 
 export const renderUniverse = (
   gl: WebGL2RenderingContext,

@@ -1,7 +1,5 @@
 lib
 
-# Created by https://www.gitignore.io/api/web,git,vim,node,linux,macos,windows,sublimetext
-
 ### Git ###
 *.orig
 
@@ -173,5 +171,3 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-
-# End of https://www.gitignore.io/api/web,git,vim,node,linux,macos,windows,sublimetext
