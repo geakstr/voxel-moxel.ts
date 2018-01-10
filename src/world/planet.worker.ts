@@ -1,17 +1,18 @@
-import { ATLAS, getRandomTexture } from "../textures";
+import { getRandomTexture } from "../textures/getRandomTexture";
+import { ATLAS } from "../textures/constants";
 import { CUBE_STRING_TO_INT_TYPE, PLANET_SIZE, CHUNK_SIZE } from "./constants";
-import { Planet } from "./planet";
-import { Chunk, createChunk } from "./chunk";
-// import { SimplexNoise } from "./noise";
+import { Planet, Chunk } from "./types";
+import { createChunk } from "./createChunk";
 
 self.addEventListener(
   "message",
   e => {
-    const { action, data } = e.data;
+    const { reqid, action, data } = e.data;
 
     switch (action) {
       case "BUILD_PLANET": {
         (self.postMessage as any)({
+          resid: reqid,
           action: "BUILD_PLANET",
           data: buildPlanet(data as Planet)
         });
@@ -27,7 +28,6 @@ self.addEventListener(
 const buildPlanet = (planet: Planet): Planet => {
   planet.blocks = genBlocks();
   planet.chunks = genChunks(planet);
-  planet.building = false;
   return planet;
 };
 

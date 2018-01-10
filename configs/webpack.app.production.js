@@ -7,16 +7,17 @@ const MinifyPlugin = require("babel-minify-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const UglifyJS = require("uglify-js");
 
-const root = path.resolve(__dirname, "./");
+const root = path.resolve(__dirname, "../");
 const src = path.resolve(root, "./src");
-const commonConfig = require("./webpack.base.js");
+const commonConfig = require("./webpack.app.base.js");
 
 const { SOURCE_MAP_EXPLORER } = process.env;
 
 module.exports = webpackMerge(commonConfig, {
   bail: true,
   entry: {
-    app: path.resolve(src, "./index.tsx")
+    app: path.resolve(src, "./index.tsx"),
+    planetWorker: path.resolve(src, "./world/planet.worker.ts")
   },
   output: {
     path: path.resolve(root, "lib"),

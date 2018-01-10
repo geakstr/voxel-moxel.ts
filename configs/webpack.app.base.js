@@ -3,7 +3,7 @@ const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const Dotenv = require("dotenv-webpack");
 
-const root = path.resolve(__dirname, "./");
+const root = path.resolve(__dirname, "../");
 const src = path.resolve(root, "./src");
 
 const { NODE_ENV } = process.env;

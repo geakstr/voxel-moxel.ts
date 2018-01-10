@@ -10,7 +10,8 @@
   "scripts": {
     "test": "exit 0",
     "start": "NODE_ENV=development node ./dev-server.js",
-    "build": "rm -rf ./lib/* && NODE_ENV=production webpack --colors --config ./webpack.production.js"
+    "watch-planet-worker": "NODE_ENV=development webpack --watch --colors --config ./configs/webpack.planet.worker.development.js",
+    "build": "rm -rf ./lib/* && NODE_ENV=production webpack --colors --config ./configs/webpack.app.production.js"
   },
   "devDependencies": {
     "@types/gl-matrix": "2.4.0",
@@ -61,6 +62,7 @@
   },
   "dependencies": {
     "date-fns": "1.29.0",
+    "express": "^4.16.2",
     "gl-matrix": "2.4.0",
     "is": "3.2.1",
     "react": "16.2.0",

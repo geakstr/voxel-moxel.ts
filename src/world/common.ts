@@ -2,7 +2,7 @@ import { getAttr, SHADER_ATTR } from "../shaders";
 
 export const createVertexArray = (
   gl: WebGL2RenderingContext,
-  data: number[],
+  data: Float32Array,
   indicesCount: number
 ) => {
   const vao = gl.createVertexArray();
@@ -39,7 +39,7 @@ export const createVertexArray = (
   );
   bytesOffset += 8;
 
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.DYNAMIC_DRAW);
+  gl.bufferData(gl.ARRAY_BUFFER, data, gl.DYNAMIC_DRAW);
 
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, createBuffer(gl, "ibo"));
   gl.bufferData(

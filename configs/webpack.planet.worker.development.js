@@ -4,31 +4,23 @@ const webpackMerge = require("webpack-merge");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const { CheckerPlugin } = require("awesome-typescript-loader");
 
-const root = path.resolve(__dirname, "./");
+const root = path.resolve(__dirname, "../");
 const src = path.resolve(root, "./src");
-const commonConfig = require("./webpack.base.js");
-
-const { HTTPS = "off" } = process.env;
-const shema = HTTPS === "on" ? "https" : "http";
-const port = HTTPS === "on" ? 443 : 3000;
+const commonConfig = require("./webpack.planet.worker.base.js");
 
 module.exports = webpackMerge(commonConfig, {
   entry: {
-    app: [
-      "react-hot-loader/patch",
-      `webpack-dev-server/client?${shema}://localhost:${port}`,
-      "webpack/hot/only-dev-server",
-      path.resolve(src, "./index.tsx")
-    ]
+    "planet.worker": path.resolve(src, "./world/planet.worker.ts")
   },
   output: {
+    path: path.resolve(root, "lib"),
     filename: "[name].js",
     chunkFilename: "[name].js",
+    sourceMapFilename: "[name].map",
     publicPath: "/"
   },
-  devtool: "cheap-module-eval-source-map",
+  devtool: "cheap-source-map",
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
     new webpack.DefinePlugin({
       "process.env.NODE_ENV": JSON.stringify("development")

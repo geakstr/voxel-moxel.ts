@@ -1,19 +1,10 @@
 import { vec4 } from "gl-matrix";
-import { ATLAS, getRandomTexture } from "../textures";
 import * as frustum from "../frustum";
-import { position } from "../camera";
-import { Chunk, createChunk, renderChunk } from "./chunk";
-import { CUBE_STRING_TO_INT_TYPE, CHUNK_SIZE, PLANET_SIZE } from "./constants";
-// import { SimplexNoise } from "./noise";
+import { createVertexArray } from "./common";
+import { renderChunk } from "./chunk";
+import { Planet } from "./types";
 
-export interface Planet {
-  chunks: Chunk[];
-  blocks: number[][][];
-  x: number;
-  y: number;
-  z: number;
-  building: boolean;
-}
+const worker = new Worker("/assets/planet.worker.js");
 
 export const createPlanet = (
   gl: WebGL2RenderingContext,
@@ -21,14 +12,49 @@ export const createPlanet = (
   y: number,
   z: number
 ): Planet => {
-  const planet = {
+  const planet: Planet = {
     x,
     y,
     z,
     chunks: [],
     blocks: [],
-    building: true
+    ready: false
   };
+
+  const reqid = Math.random();
+  worker.addEventListener(
+    "message",
+    e => {
+      const { resid, action, data } = e.data;
+      switch (action) {
+        case "BUILD_PLANET": {
+          if (resid === reqid) {
+            const newPlanet = data as Planet;
+            planet.chunks = newPlanet.chunks;
+            planet.chunks.forEach(chunk => {
+              chunk.vao = createVertexArray(
+                gl,
+                chunk.data!,
+                chunk.indicesCount
+              );
+            });
+            planet.blocks = newPlanet.blocks;
+            planet.ready = true;
+          }
+          break;
+        }
+        default:
+          break;
+      }
+    },
+    false
+  );
+
+  worker.postMessage({
+    reqid,
+    action: "BUILD_PLANET",
+    data: planet
+  });
 
   return planet;
 };
