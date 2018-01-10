@@ -8,6 +8,8 @@ export const getAtlasCoord = (textureName: ATLAS) => coords[textureName];
 const coords: { [key: string]: vec2 } = {};
 
 Object.keys(atlas).forEach(textureName => {
-  const [u, v] = atlas[textureName];
-  coords[textureName] = vec2.fromValues(u * GL_CROP_SIZE, v * GL_CROP_SIZE);
+  coords[textureName] = vec2.fromValues(
+    atlas[textureName][0] * GL_CROP_SIZE,
+    atlas[textureName][1] * GL_CROP_SIZE
+  );
 });
