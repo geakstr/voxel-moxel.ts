@@ -1,7 +1,7 @@
 import { vec4 } from "gl-matrix";
-import { ATLAS, getRandomTexture } from "~/textures";
-import * as frustum from "~/frustum";
-import { position } from "~/camera";
+import { ATLAS, getRandomTexture } from "../textures";
+import * as frustum from "../frustum";
+import { position } from "../camera";
 import { Chunk, createChunk, renderChunk } from "./chunk";
 import { CUBE_STRING_TO_INT_TYPE, CHUNK_SIZE, PLANET_SIZE } from "./constants";
 // import { SimplexNoise } from "./noise";

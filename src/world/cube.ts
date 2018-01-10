@@ -1,4 +1,4 @@
-import { ATLAS, GL_CROP_SIZE, getAtlasCoord } from "~/textures";
+import { ATLAS, GL_CROP_SIZE, getAtlasCoord } from "../textures";
 import { CUBE_STRING_TO_INT_TYPE } from "./constants";
 
 export enum SIDE {

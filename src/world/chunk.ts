@@ -1,8 +1,8 @@
 import * as is from "is";
 import { vec3 } from "gl-matrix";
-import { getAtlas } from "~/textures";
-import { ATLAS, ATLAS_SIZE, CROP_SIZE, getRandomTexture } from "~/textures";
-import { getUniform, SHADER_UNIFORM } from "~/shaders";
+import { getAtlas } from "../textures";
+import { ATLAS, ATLAS_SIZE, CROP_SIZE, getRandomTexture } from "../textures";
+import { getUniform, SHADER_UNIFORM } from "../shaders";
 import { createVertexArray } from "./common";
 import { createCube, SIDE } from "./cube";
 import {

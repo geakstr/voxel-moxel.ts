@@ -39,9 +39,6 @@ const babelLoaderQuery = {
 module.exports = {
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
-    alias: {
-      "~": src
-    },
     modules: [path.resolve(root, "node_modules"), "node_modules"]
   },
   module: {

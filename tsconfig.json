@@ -10,11 +10,6 @@
     "jsx": "react",
     "allowJs": true,
     "baseUrl": ".",
-    "paths": {
-      "~/*": [
-        "src/*"
-      ],
-    },
     "lib": [
       "es2016",
       "dom"

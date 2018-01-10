@@ -1,4 +1,4 @@
-import { ATLAS } from "~/textures";
+import { ATLAS } from "../textures";
 
 export const UNIVERSE_SIZE = 1;
 export const CHUNK_SIZE = 16;
