@@ -13,7 +13,6 @@ uniform sampler2D ${SHADER_UNIFORM.SAMPLER};
 out vec4 FragColor;
 
 void main(void) {
-  vec2 tex_coord = ${SHADER_IN_OUT.TEX_COORD};  
-  FragColor = texture(${SHADER_UNIFORM.SAMPLER}, tex_coord);
+  FragColor = texture(${SHADER_UNIFORM.SAMPLER}, ${SHADER_IN_OUT.TEX_COORD});
 }
 `.trim();

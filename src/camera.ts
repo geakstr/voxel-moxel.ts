@@ -40,7 +40,7 @@ export const update = (aspect: number): mat4 => {
     move();
   }
 
-  mat4.perspective(projection, fov, aspect, 0.1, 1000.0);
+  mat4.perspective(projection, fov, aspect, 0.1, 1500.0);
   vec3.normalize(direction, vec3.sub(direction, lookAt, position));
 
   // rotate camera by quaternions
