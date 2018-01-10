@@ -31,12 +31,7 @@ export const render = (
     gl.uniformMatrix4fv(getUniform(SHADER_UNIFORM.MVP_MATRIX), false, mvp);
 
     renderUniverse(gl, frustumPlanes, universe);
-
-    tick(onAnimationFrame);
+    requestAnimationFrame(onAnimationFrame);
   };
-
-  tick(onAnimationFrame);
-};
-
-const tick = (onAnimationFrame: (now: number) => void) =>
   requestAnimationFrame(onAnimationFrame);
+};
