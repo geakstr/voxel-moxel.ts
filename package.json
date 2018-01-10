@@ -10,8 +10,7 @@
   "scripts": {
     "test": "exit 0",
     "start": "NODE_ENV=development node ./dev-server.js",
-    "build":
-      "rm -rf ./lib/* && NODE_ENV=production webpack --colors --config ./webpack.production.js"
+    "build": "rm -rf ./lib/* && NODE_ENV=production webpack --colors --config ./webpack.production.js"
   },
   "devDependencies": {
     "@types/gl-matrix": "2.4.0",
@@ -57,7 +56,8 @@
     "webpack-dev-server": "2.9.7",
     "webpack-merge": "4.1.1",
     "webpack-node-externals": "1.6.0",
-    "webpack-sources": "1.1.0"
+    "webpack-sources": "1.1.0",
+    "worker-loader": "1.1.0"
   },
   "dependencies": {
     "date-fns": "1.29.0",

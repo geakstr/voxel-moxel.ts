@@ -13,13 +13,12 @@ import {
 } from "./constants";
 
 export interface Chunk {
-  readonly position: vec3;
-  readonly vao: WebGLVertexArrayObject;
-  readonly indicesCount: number;
+  position: vec3;
+  indicesCount: number;
+  vao?: WebGLVertexArrayObject;
 }
 
 export const createChunk = (
-  gl: WebGL2RenderingContext,
   blocks: number[][][],
   planetXOffset: number,
   planetYOffset: number,
@@ -55,15 +54,13 @@ export const createChunk = (
       }
     }
   }
-  const indicesCount = data.length / 5 * 3 / 2;
   return {
     position: vec3.fromValues(
       chunkXOffset + planetXOffset,
       chunkYOffset + planetYOffset,
       chunkZOffset + planetZOffset
     ),
-    indicesCount,
-    vao: createVertexArray(gl, data, indicesCount)
+    indicesCount: data.length / 5 * 3 / 2
   };
 };
 
@@ -100,7 +97,7 @@ export const renderChunk = (gl: WebGL2RenderingContext, chunk: Chunk) => {
   gl.bindTexture(gl.TEXTURE_2D, getAtlas());
   gl.uniform1i(getUniform(SHADER_UNIFORM.SAMPLER), 0);
 
-  gl.bindVertexArray(chunk.vao);
+  gl.bindVertexArray(chunk.vao!);
   gl.drawElements(gl.TRIANGLES, chunk.indicesCount, gl.UNSIGNED_INT, 0);
   gl.bindVertexArray(null);
 };

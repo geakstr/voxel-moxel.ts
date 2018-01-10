@@ -1,4 +1,5 @@
 import { vec4 } from "gl-matrix";
+import { UNIVERSE_SIZE } from "./constants";
 import { Planet, createPlanet, renderPlanet } from "./planet";
 
 export interface Universe {
@@ -7,9 +8,9 @@ export interface Universe {
 
 export const createUniverse = (gl: WebGL2RenderingContext): Universe => {
   const planets: Planet[] = [];
-  for (let x = 0; x < 5; x++) {
-    for (let y = 0; y < 5; y++) {
-      for (let z = 0; z < 5; z++) {
+  for (let x = 0; x < UNIVERSE_SIZE; x++) {
+    for (let y = 0; y < UNIVERSE_SIZE; y++) {
+      for (let z = 0; z < UNIVERSE_SIZE; z++) {
         planets.push(createPlanet(gl, x * 1000, y * 1000, z * 1000));
       }
     }
