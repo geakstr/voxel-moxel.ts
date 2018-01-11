@@ -1,43 +1,42 @@
-import { Planet } from "../types";
+import { Planet, Chunk, ChunkBase } from "../types";
 import { createVertexArray } from "./vao";
+import { queue } from "async";
 
 const worker = new Worker("/workers/planet.worker.js");
 
+const chunksQ = queue<
+  { gl: WebGL2RenderingContext; planet: Planet; chunkBase: ChunkBase },
+  {}
+>((task, callback) => {
+  const { gl, planet, chunkBase } = task;
+  planet.chunks.push({
+    x: chunkBase.x,
+    y: chunkBase.y,
+    z: chunkBase.z,
+    blocks: chunkBase.blocks,
+    indicesCount: chunkBase.indicesCount,
+    vao: createVertexArray(gl, chunkBase.data, chunkBase.indicesCount)
+  });
+  callback();
+}, 1);
+
 export const createPlanet = (
   gl: WebGL2RenderingContext,
-  x: number,
-  y: number,
-  z: number
+  planet: Planet
 ): Planet => {
-  const planet: Planet = {
-    x,
-    y,
-    z,
-    chunks: [],
-    blocks: [],
-    ready: false
-  };
-
   const reqid = Math.random();
   worker.addEventListener(
     "message",
     e => {
       const { resid, action, data } = e.data;
       switch (action) {
-        case "BUILD_PLANET": {
+        case "BUILD_CHUNK": {
           if (resid === reqid) {
-            const newPlanet = data as Planet;
-            planet.chunks = newPlanet.chunks;
-            planet.chunks.forEach(chunk => {
-              chunk.vao = createVertexArray(
-                gl,
-                chunk.data!,
-                chunk.indicesCount
-              );
-              delete chunk.data;
+            chunksQ.push({
+              gl,
+              planet,
+              chunkBase: data as ChunkBase
             });
-            planet.blocks = newPlanet.blocks;
-            planet.ready = true;
           }
           break;
         }

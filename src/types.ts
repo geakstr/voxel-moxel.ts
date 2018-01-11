@@ -2,20 +2,28 @@ export interface Universe {
   readonly planets: Planet[];
 }
 
+export interface ChunkBase {
+  readonly x: number;
+  readonly y: number;
+  readonly z: number;
+  readonly data: Float32Array;
+  readonly blocks: number[][][];
+  readonly indicesCount: number;
+}
+
 export interface Chunk {
-  x: number;
-  y: number;
-  z: number;
-  indicesCount: number;
-  data?: Float32Array;
-  vao?: WebGLVertexArrayObject;
+  readonly x: number;
+  readonly y: number;
+  readonly z: number;
+  readonly indicesCount: number;
+  readonly blocks: number[][][];
+  readonly vao: WebGLVertexArrayObject;
 }
 
 export interface Planet {
-  chunks: Chunk[];
-  blocks: number[][][];
-  x: number;
-  y: number;
-  z: number;
-  ready: boolean;
+  readonly id: number;
+  readonly chunks: Chunk[];
+  readonly x: number;
+  readonly y: number;
+  readonly z: number;
 }

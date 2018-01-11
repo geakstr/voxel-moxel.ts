@@ -1,8 +1,7 @@
 {
   "name": "voxel-moxel.ts",
   "version": "0.1.0",
-  "description":
-    "just for fun voxel game like minecraft written on typescript on top of webgl",
+  "description": "just for fun voxel game coded on typescript on top of webgl",
   "main": "src/index.tsx",
   "repository": "https://github.com/geakstr/voxel-moxel.ts",
   "author": "geakstr <geakstr@me.com>",
@@ -23,6 +22,7 @@
     "surge": "surge --project ./lib --domain voxel-moxel.dkharitonov.me"
   },
   "devDependencies": {
+    "@types/async": "2.0.46",
     "@types/gl-matrix": "2.4.0",
     "@types/is": "0.0.18",
     "@types/react": "16.0.34",
@@ -72,6 +72,7 @@
     "worker-loader": "1.1.0"
   },
   "dependencies": {
+    "async": "2.6.0",
     "date-fns": "1.29.0",
     "gl-matrix": "2.4.0",
     "react": "16.2.0",

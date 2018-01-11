@@ -10,8 +10,8 @@ export const renderUniverse = (
   const count = universe.planets.length;
   for (let i = 0; i < count; i += 1) {
     const planet = universe.planets[i];
-    if (planet.ready) {
-      renderPlanet(gl, frustumPlanes, planet);
-    }
+    // if (planet.ready) {
+    renderPlanet(gl, frustumPlanes, planet);
+    // }
   }
 };

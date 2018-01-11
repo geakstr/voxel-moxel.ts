@@ -2,6 +2,10 @@
 # yarn lockfile v1
 
 
+"@types/async@2.0.46":
+  version "2.0.46"
+  resolved "https://registry.npmjs.org/@types/async/-/async-2.0.46.tgz#f13a6c336a6582b95d0c0269e796b709488fd54d"
+
 "@types/gl-matrix@2.4.0":
   version "2.4.0"
   resolved "https://registry.npmjs.org/@types/gl-matrix/-/gl-matrix-2.4.0.tgz#a27affbaf3a849894817f648bf68ac710dedf4a3"
@@ -301,15 +305,15 @@ async-foreach@^0.1.3:
   version "0.1.3"
   resolved "https://registry.npmjs.org/async-foreach/-/async-foreach-0.1.3.tgz#36121f845c0578172de419a97dbeb1d16ec34542"
 
-async@^1.5.2:
-  version "1.5.2"
-  resolved "https://registry.npmjs.org/async/-/async-1.5.2.tgz#ec6a61ae56480c0c3cb241c95618e20892f9672a"
-
-async@^2.1.2, async@^2.1.5, async@^2.4.1, async@^2.5.0, async@~2.6.0:
+async@2.6.0, async@^2.1.2, async@^2.1.5, async@^2.4.1, async@^2.5.0, async@~2.6.0:
   version "2.6.0"
   resolved "https://registry.npmjs.org/async/-/async-2.6.0.tgz#61a29abb6fcc026fea77e56d1c6ec53a795951f4"
   dependencies:
     lodash "^4.14.0"
+
+async@^1.5.2:
+  version "1.5.2"
+  resolved "https://registry.npmjs.org/async/-/async-1.5.2.tgz#ec6a61ae56480c0c3cb241c95618e20892f9672a"
 
 asynckit@^0.4.0:
   version "0.4.0"
@@ -4069,10 +4073,6 @@ is-wsl@^1.1.0:
 is-zip@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/is-zip/-/is-zip-1.0.0.tgz#47b0a8ff4d38a76431ccfd99a8e15a4c86ba2325"
-
-is@3.2.1:
-  version "3.2.1"
-  resolved "https://registry.npmjs.org/is/-/is-3.2.1.tgz#d0ac2ad55eb7b0bec926a5266f6c662aaa83dca5"
 
 isarray@0.0.1:
   version "0.0.1"

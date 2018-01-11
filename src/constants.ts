@@ -1,7 +1,7 @@
 export const UNIVERSE_SIZE = 1;
 export const CHUNK_SIZE = 16;
 export const HALF_CHUNK_SIZE = CHUNK_SIZE / 2;
-export const PLANET_SIZE = 3;
+export const PLANET_SIZE = 8;
 export const PLANET_BORDER = PLANET_SIZE * CHUNK_SIZE - 1;
 
 export const ATLAS_SIZE = 80;

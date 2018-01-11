@@ -44,7 +44,7 @@ export const createVertexArray = (
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, createBuffer(gl, "ibo"));
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
-    new Uint32Array(createIndex(indicesCount)),
+    createIndex(indicesCount),
     gl.DYNAMIC_DRAW
   );
 
@@ -71,5 +71,5 @@ const createIndex = (indicesCount: number) => {
     indices.push(i + 3);
     indices.push(i + 2);
   }
-  return indices;
+  return new Uint32Array(indices);
 };
