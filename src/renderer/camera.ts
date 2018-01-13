@@ -32,7 +32,7 @@ const pitchQuat: quat = quat.create();
 const yawQuat: quat = quat.create();
 const zeroDot: vec3 = vec3.create();
 
-const currentlyPressedKeys: { [key: string]: boolean } = {};
+let currentlyPressedKeys: { [key: string]: boolean } = {};
 
 /**
  * Calculate `model × view × projection` matrix (mvp)
@@ -80,7 +80,10 @@ export const update = (aspect: number): mat4 => {
   return mat4.multiply(mvp, projection, mat4.multiply(mvp, view, model));
 };
 
-export const pause = () => (isPaused = true);
+export const pause = () => {
+  isPaused = true;
+  currentlyPressedKeys = {};
+};
 export const resume = () => (isPaused = false);
 
 const onMouseMove = (event: MouseEvent) => {

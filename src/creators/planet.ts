@@ -50,7 +50,9 @@ export const createPlanet = (
   worker.postMessage({
     reqid,
     action: "BUILD_PLANET",
-    data: planet
+    data: {
+      planet
+    }
   });
 
   return planet;

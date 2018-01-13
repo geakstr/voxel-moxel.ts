@@ -1,13 +1,14 @@
 export const UNIVERSE_SIZE = 1;
 export const CHUNK_SIZE = 16;
 export const HALF_CHUNK_SIZE = CHUNK_SIZE / 2;
-export const PLANET_SIZE = 8;
+export const PLANET_SIZE = 3;
 export const PLANET_BORDER = PLANET_SIZE * CHUNK_SIZE - 1;
 
 export const ATLAS_SIZE = 80;
 export const CROP_SIZE = 16;
 
 export const GL_PIXEL_SIZE = 1.0 / ATLAS_SIZE;
+export const GL_SUB_PIXEL_SIZE = GL_PIXEL_SIZE / 16;
 export const GL_CROP_SIZE = GL_PIXEL_SIZE * CROP_SIZE;
 
 export enum ATLAS {
@@ -33,7 +34,7 @@ export enum ATLAS {
   LEAVES = "LEAVES",
   WOOL = "WOOL",
   MONSTER_SPAWNER = "MONSTER_SPAWNER",
-  SNOW = "snSNOWow",
+  SNOW = "SNOW",
   ICE = "ICE",
   DIRT_WITH_SNOW = "DIRT_WITH_SNOW"
 }
@@ -133,10 +134,19 @@ export const VERTEX_5 = [1, 1, 0];
 export const VERTEX_6 = [1, 0, 0];
 export const VERTEX_7 = [0, 0, 0];
 
-export const TEX_COORDS_0 = [0, 0];
-export const TEX_COORDS_1 = [0, 1 * GL_CROP_SIZE];
-export const TEX_COORDS_2 = [1 * GL_CROP_SIZE, 0];
-export const TEX_COORDS_3 = [1 * GL_CROP_SIZE, 1 * GL_CROP_SIZE];
+export const TEX_COORDS_0 = [0 + GL_SUB_PIXEL_SIZE, 0 + GL_SUB_PIXEL_SIZE];
+export const TEX_COORDS_1 = [
+  0 + GL_SUB_PIXEL_SIZE,
+  1 * GL_CROP_SIZE - GL_SUB_PIXEL_SIZE
+];
+export const TEX_COORDS_2 = [
+  1 * GL_CROP_SIZE - GL_SUB_PIXEL_SIZE,
+  0 + GL_SUB_PIXEL_SIZE
+];
+export const TEX_COORDS_3 = [
+  1 * GL_CROP_SIZE - GL_SUB_PIXEL_SIZE,
+  1 * GL_CROP_SIZE - GL_SUB_PIXEL_SIZE
+];
 
 // prettier-ignore
 export const FRONT_SIDE = [

@@ -9,13 +9,15 @@ import {
 } from "../constants";
 import { Planet, ChunkBase } from "../types";
 import { createChunkBase } from "../creators/chunk";
+import { createBlock } from "../creators/block";
+import { prand } from "../utils/rand";
 
 const planetsQ = queue<{ reqid: number; planet: Planet }, {}>(
   (task, callback) => {
     const { reqid, planet } = task;
 
-    const blocks = genBlocks();
-    genChunksBases(reqid, blocks, planet);
+    genChunksBases(reqid, planet);
+    get(planet);
 
     callback();
   },
@@ -76,10 +78,12 @@ const genBlocks = () => {
   return blocks;
 };
 
-const genChunksBases = (reqid: any, blocks: number[][][], planet: Planet) => {
+// https://github.com/mikolalysenko/mikolalysenko.github.com/blob/gh-pages/MinecraftMeshes2/js/greedy_tri.js
+const genChunksBases = (reqid: any, planet: Planet) => {
   for (let chunkX = 0; chunkX < PLANET_SIZE; chunkX += 1) {
     for (let chunkY = 0; chunkY < PLANET_SIZE; chunkY += 1) {
       for (let chunkZ = 0; chunkZ < PLANET_SIZE; chunkZ += 1) {
+        const blocks = genBlocks();
         const chunkBase = createChunkBase(
           blocks,
           planet.x,
@@ -94,6 +98,53 @@ const genChunksBases = (reqid: any, blocks: number[][][], planet: Planet) => {
           action: "BUILD_CHUNK",
           data: chunkBase
         });
+      }
+    }
+  }
+};
+
+const get = (planet: Planet) => {
+  const chunks: number[][][] = [];
+
+  const setOrGetBlockType = (
+    blockType: number,
+    chunkX: number,
+    chunkY: number,
+    chunkZ: number,
+    blockX: number,
+    blockY: number,
+    blockZ: number
+  ) => {
+    if (typeof chunks[chunkX] === "undefined") {
+      chunks[chunkX] = [];
+    }
+    if (typeof chunks[chunkX][chunkY] === "undefined") {
+      chunks[chunkX][chunkY] = [];
+    }
+    if (typeof chunks[chunkX][chunkY][chunkZ] === "undefined") {
+      chunks[chunkX][chunkY][chunkZ] = blockType;
+    }
+    return chunks[chunkX][chunkY][chunkZ];
+  };
+
+  const createNewBlock = (
+    blockType: number,
+    chunkX: number,
+    chunkY: number,
+    chunkZ: number,
+    blockX: number,
+    blockY: number,
+    blockZ: number
+  ) => {};
+
+  for (let chunkX = 0; chunkX < PLANET_SIZE; chunkX += 1) {
+    for (let chunkY = 0; chunkY < PLANET_SIZE; chunkY += 1) {
+      for (let chunkZ = 0; chunkZ < PLANET_SIZE; chunkZ += 1) {
+        for (let blockX = 0; blockX < CHUNK_SIZE; blockX += 1) {
+          for (let blockY = 0; blockY < CHUNK_SIZE; blockY += 1) {
+            for (let blockZ = 0; blockZ < CHUNK_SIZE; blockZ += 1) {}
+          }
+        }
       }
     }
   }

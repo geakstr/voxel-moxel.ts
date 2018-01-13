@@ -8,6 +8,8 @@ export const createGl = (canvas: HTMLCanvasElement) => {
     }
     gl.clearColor(0.8, 0.8, 0.8, 1.0);
     gl.enable(gl.DEPTH_TEST);
+    gl.enable(gl.CULL_FACE);
+    gl.depthFunc(gl.LESS);
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 

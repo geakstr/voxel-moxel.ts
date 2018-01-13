@@ -1,10 +1,8 @@
 import { ATLAS } from "../constants";
+import { prand } from "../utils/rand";
 
 export const getRandomTexture = () => {
   const keys = Object.keys(ATLAS);
   const max = keys.length - 1;
-  return keys[rnd(0, max)] as ATLAS;
+  return keys[prand.nextInRange(0, max)] as ATLAS;
 };
-
-const rnd = (from: number, to: number) =>
-  Math.floor(Math.random() * (to - from + 1)) + from;
