@@ -1,6 +1,7 @@
-import { Planet, Chunk, ChunkBase } from "../types";
-import { createVertexArray } from "./vao";
 import { queue } from "async";
+import { Planet, Chunk, ChunkBase } from "../types";
+import { position } from "../renderer/camera";
+import { createVertexArray } from "./vao";
 
 const worker = new Worker("/workers/planet.worker.js");
 
@@ -51,7 +52,8 @@ export const createPlanet = (
     reqid,
     action: "BUILD_PLANET",
     data: {
-      planet
+      planet,
+      position
     }
   });
 

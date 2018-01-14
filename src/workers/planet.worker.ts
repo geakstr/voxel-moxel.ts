@@ -1,4 +1,5 @@
 import { queue } from "async";
+import { vec3 } from "gl-matrix";
 import { getRandomTexture } from "../textures/getRandomTexture";
 import {
   ATLAS,
@@ -12,12 +13,11 @@ import { createChunkBase } from "../creators/chunk";
 import { createBlock } from "../creators/block";
 import { prand } from "../utils/rand";
 
-const planetsQ = queue<{ reqid: number; planet: Planet }, {}>(
+const planetsQ = queue<{ reqid: number; planet: Planet; position: vec3 }, {}>(
   (task, callback) => {
-    const { reqid, planet } = task;
+    const { reqid, planet, position } = task;
 
-    genChunksBases(reqid, planet);
-    get(planet);
+    genChunksBases(reqid, planet, position);
 
     callback();
   },
@@ -33,7 +33,8 @@ self.addEventListener(
       case "BUILD_PLANET": {
         planetsQ.push({
           reqid,
-          planet: data as Planet
+          planet: data.planet as Planet,
+          position: data.position as vec3
         });
         break;
       }
@@ -68,10 +69,10 @@ const genBlocks = () => {
   for (let x = 0; x < CHUNK_SIZE; x += 1) {
     for (let y = 0; y < CHUNK_SIZE; y += 1) {
       for (let z = 0; z < CHUNK_SIZE; z += 1) {
-        // if (Math.random() >= 0.49) {
-        const tex = getRandomTexture();
-        blocks[x][y][z] = BLOCK_STRING_TO_INT_TYPE[tex];
-        // }
+        if (Math.random() >= 0.49) {
+          const tex = getRandomTexture();
+          blocks[x][y][z] = BLOCK_STRING_TO_INT_TYPE[tex];
+        }
       }
     }
   }
@@ -79,72 +80,29 @@ const genBlocks = () => {
 };
 
 // https://github.com/mikolalysenko/mikolalysenko.github.com/blob/gh-pages/MinecraftMeshes2/js/greedy_tri.js
-const genChunksBases = (reqid: any, planet: Planet) => {
-  for (let chunkX = 0; chunkX < PLANET_SIZE; chunkX += 1) {
-    for (let chunkY = 0; chunkY < PLANET_SIZE; chunkY += 1) {
-      for (let chunkZ = 0; chunkZ < PLANET_SIZE; chunkZ += 1) {
+const genChunksBases = (reqid: any, planet: Planet, position: vec3) => {
+  const currentChunkX = Math.round(position[0] / CHUNK_SIZE) - 1;
+  const currentChunkY = Math.round(position[1] / CHUNK_SIZE) - 2;
+  const currentChunkZ = Math.round(position[2] / CHUNK_SIZE) - 1;
+
+  for (let x = currentChunkX - 2; x <= currentChunkX + 2; x += 1) {
+    for (let y = currentChunkY - 2; y <= currentChunkY; y += 1) {
+      for (let z = currentChunkZ - 2; z <= currentChunkZ + 2; z += 1) {
         const blocks = genBlocks();
         const chunkBase = createChunkBase(
           blocks,
           planet.x,
           planet.y,
           planet.z,
-          chunkX * CHUNK_SIZE,
-          chunkY * CHUNK_SIZE,
-          chunkZ * CHUNK_SIZE
+          x * CHUNK_SIZE,
+          y * CHUNK_SIZE,
+          z * CHUNK_SIZE
         );
         (self.postMessage as any)({
           resid: reqid,
           action: "BUILD_CHUNK",
           data: chunkBase
         });
-      }
-    }
-  }
-};
-
-const get = (planet: Planet) => {
-  const chunks: number[][][] = [];
-
-  const setOrGetBlockType = (
-    blockType: number,
-    chunkX: number,
-    chunkY: number,
-    chunkZ: number,
-    blockX: number,
-    blockY: number,
-    blockZ: number
-  ) => {
-    if (typeof chunks[chunkX] === "undefined") {
-      chunks[chunkX] = [];
-    }
-    if (typeof chunks[chunkX][chunkY] === "undefined") {
-      chunks[chunkX][chunkY] = [];
-    }
-    if (typeof chunks[chunkX][chunkY][chunkZ] === "undefined") {
-      chunks[chunkX][chunkY][chunkZ] = blockType;
-    }
-    return chunks[chunkX][chunkY][chunkZ];
-  };
-
-  const createNewBlock = (
-    blockType: number,
-    chunkX: number,
-    chunkY: number,
-    chunkZ: number,
-    blockX: number,
-    blockY: number,
-    blockZ: number
-  ) => {};
-
-  for (let chunkX = 0; chunkX < PLANET_SIZE; chunkX += 1) {
-    for (let chunkY = 0; chunkY < PLANET_SIZE; chunkY += 1) {
-      for (let chunkZ = 0; chunkZ < PLANET_SIZE; chunkZ += 1) {
-        for (let blockX = 0; blockX < CHUNK_SIZE; blockX += 1) {
-          for (let blockY = 0; blockY < CHUNK_SIZE; blockY += 1) {
-            for (let blockZ = 0; blockZ < CHUNK_SIZE; blockZ += 1) {}
-          }
-        }
       }
     }
   }
