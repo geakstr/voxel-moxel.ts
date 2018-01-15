@@ -69,10 +69,10 @@ const genBlocks = () => {
   for (let x = 0; x < CHUNK_SIZE; x += 1) {
     for (let y = 0; y < CHUNK_SIZE; y += 1) {
       for (let z = 0; z < CHUNK_SIZE; z += 1) {
-        if (Math.random() >= 0.49) {
-          const tex = getRandomTexture();
-          blocks[x][y][z] = BLOCK_STRING_TO_INT_TYPE[tex];
-        }
+        // if (Math.random() >= 0.49) {
+        const tex = getRandomTexture();
+        blocks[x][y][z] = BLOCK_STRING_TO_INT_TYPE[tex];
+        // }
       }
     }
   }
@@ -82,11 +82,11 @@ const genBlocks = () => {
 // https://github.com/mikolalysenko/mikolalysenko.github.com/blob/gh-pages/MinecraftMeshes2/js/greedy_tri.js
 const genChunksBases = (reqid: any, planet: Planet, position: vec3) => {
   const currentChunkX = Math.round(position[0] / CHUNK_SIZE) - 1;
-  const currentChunkY = Math.round(position[1] / CHUNK_SIZE) - 2;
+  const currentChunkY = Math.round(position[1] / CHUNK_SIZE) - 1;
   const currentChunkZ = Math.round(position[2] / CHUNK_SIZE) - 1;
 
   for (let x = currentChunkX - 2; x <= currentChunkX + 2; x += 1) {
-    for (let y = currentChunkY - 2; y <= currentChunkY; y += 1) {
+    for (let y = currentChunkY - 2; y < currentChunkY; y += 1) {
       for (let z = currentChunkZ - 2; z <= currentChunkZ + 2; z += 1) {
         const blocks = genBlocks();
         const chunkBase = createChunkBase(
