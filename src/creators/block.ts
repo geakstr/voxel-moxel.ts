@@ -19,23 +19,9 @@ export const createBlock = (
   const texture = ATLAS[BLOCK_INT_TO_STRING_TYPE[type] as any] as ATLAS;
   sides.forEach(side => {
     for (let i = 0, v = 0, t = 0; i < 4; i += 1, v += 3, t += 2) {
-      let actualTexture = texture;
-      if (texture === ATLAS.DIRT_WITH_GRASS) {
-        if (side === SIDE.TOP) {
-          actualTexture = ATLAS.GRASS;
-        } else if (side === SIDE.BOTTOM) {
-          actualTexture = ATLAS.DIRT;
-        }
-      } else if (texture === ATLAS.DIRT_WITH_SNOW) {
-        if (side === SIDE.TOP) {
-          actualTexture = ATLAS.SNOW;
-        } else if (side === SIDE.BOTTOM) {
-          actualTexture = ATLAS.DIRT;
-        }
-      }
       const vertex = SIDES_MAP[side];
       const texCoord = TEX_COORDS_MAP[side];
-      const texCoordOffset = getAtlasCoord(actualTexture);
+      const texCoordOffset = getAtlasCoord(getTextureForSide(texture, side));
       data.push(vertex[v] + x);
       data.push(vertex[v + 1] + y);
       data.push(vertex[v + 2] + z);
@@ -44,4 +30,29 @@ export const createBlock = (
     }
   });
   return data;
+};
+
+const getTextureForSide = (texture: ATLAS, side: SIDE) => {
+  switch (texture) {
+    case ATLAS.DIRT_WITH_GRASS: {
+      if (side === SIDE.TOP) {
+        return ATLAS.GRASS;
+      } else if (side === SIDE.BOTTOM) {
+        return ATLAS.DIRT;
+      }
+      break;
+    }
+    case ATLAS.DIRT_WITH_SNOW: {
+      if (side === SIDE.TOP) {
+        return ATLAS.SNOW;
+      } else if (side === SIDE.BOTTOM) {
+        return ATLAS.DIRT;
+      }
+      break;
+    }
+    default: {
+      return texture;
+    }
+  }
+  return texture;
 };
