@@ -18,6 +18,10 @@
   version "0.0.18"
   resolved "https://registry.npmjs.org/@types/is/-/is-0.0.18.tgz#7d0c575f935109be88c47dc0ea3c5075f81cf3c7"
 
+"@types/ndarray@1.0.5":
+  version "1.0.5"
+  resolved "https://registry.npmjs.org/@types/ndarray/-/ndarray-1.0.5.tgz#d1c7c2fcbdc60a9fdcbda1581208468954380961"
+
 "@types/node@*":
   version "9.3.0"
   resolved "https://registry.npmjs.org/@types/node/-/node-9.3.0.tgz#3a129cda7c4e5df2409702626892cb4b96546dd5"
@@ -4214,6 +4218,10 @@ invert-kv@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/invert-kv/-/invert-kv-1.0.0.tgz#104a8e4aaca6d3d8cd157a8ef8bfab2d7a3ffdb6"
 
+iota-array@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/iota-array/-/iota-array-1.0.0.tgz#81ef57fe5d05814cd58c2483632a99c30a0e8087"
+
 ip-regex@^1.0.1:
   version "1.0.3"
   resolved "https://registry.npmjs.org/ip-regex/-/ip-regex-1.0.3.tgz#dc589076f659f419c222039a33316f1c7387effd"
@@ -5377,6 +5385,13 @@ ncname@1.0.x:
   resolved "https://registry.npmjs.org/ncname/-/ncname-1.0.0.tgz#5b57ad18b1ca092864ef62b0b1ed8194f383b71c"
   dependencies:
     xml-char-classes "^1.0.0"
+
+ndarray@1.0.18:
+  version "1.0.18"
+  resolved "https://registry.npmjs.org/ndarray/-/ndarray-1.0.18.tgz#b60d3a73224ec555d0faa79711e502448fd3f793"
+  dependencies:
+    iota-array "^1.0.0"
+    is-buffer "^1.0.2"
 
 negotiator@0.6.1:
   version "0.6.1"

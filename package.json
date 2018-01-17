@@ -11,23 +11,22 @@
     "test": "exit 0",
     "start": "concurrently \"yarn start-planet-worker\" \"yarn start-app\"",
     "start-app": "NODE_ENV=development node ./dev-server.js",
-    "start-planet-worker":
-      "NODE_ENV=development webpack --watch --colors --config ./configs/webpack.planet.worker.development.js",
-    "build-planet-worker":
-      "NODE_ENV=production webpack --colors --config ./configs/webpack.planet.worker.production.js",
-    "build-app":
-      "rm -rf ./lib/* && NODE_ENV=production webpack --colors --config ./configs/webpack.app.production.js",
+    "start-planet-worker": "NODE_ENV=development webpack --watch --colors --config ./configs/webpack.planet.worker.development.js",
+    "build-planet-worker": "NODE_ENV=production webpack --colors --config ./configs/webpack.planet.worker.production.js",
+    "build-app": "rm -rf ./lib/* && NODE_ENV=production webpack --colors --config ./configs/webpack.app.production.js",
     "build": "yarn build-app && yarn build-planet-worker",
     "deploy": "yarn build && yarn surge",
     "surge": "surge --project ./lib --domain voxel-moxel.dkharitonov.me"
   },
   "devDependencies": {
+    "@types/ndarray": "1.0.5",
     "dev-deps": "0.1.0"
   },
   "dependencies": {
     "async": "2.6.0",
     "date-fns": "1.29.0",
     "gl-matrix": "2.4.0",
+    "ndarray": "1.0.18",
     "react": "16.2.0",
     "react-dom": "16.2.0"
   }

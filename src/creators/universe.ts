@@ -1,27 +1,29 @@
-import { UNIVERSE_SIZE } from "../constants";
+import { vec3 } from "gl-matrix";
+import { UNIVERSE_SIZE, PLANET_SIZE, CHUNK_SIZE } from "../constants";
 import { Planet, Universe } from "../types";
 import { createPlanet } from "./planet";
 
-export const createUniverse = (gl: WebGL2RenderingContext): Universe => {
-  const planets: Planet[] = [];
-  for (let x = 0, planetId = 0; x < UNIVERSE_SIZE; x++) {
-    for (let y = 0; y < UNIVERSE_SIZE; y++) {
-      for (let z = 0; z < UNIVERSE_SIZE; z++) {
-        const planet: Planet = {
-          id: planetId++,
-          x: x * 300,
-          y: y * 300,
-          z: z * 300,
-          chunks: []
-        };
-        planets.push(createPlanet(gl, planet));
-      }
-    }
-  }
+export const createUniverse = (gl: WebGL2RenderingContext): Universe => ({
+  planets: [],
+  planetsCoords: {}
+});
 
-  const universe: Universe = {
-    planets
-  };
+export const getPlanetCoord = (position: vec3) => {
+  const x = Math.round(position[0] / (PLANET_SIZE * CHUNK_SIZE));
+  const y = Math.round(position[1] / (PLANET_SIZE * CHUNK_SIZE));
+  const z = Math.round(position[2] / (PLANET_SIZE * CHUNK_SIZE));
+  return { x, y, z };
+};
 
-  return universe;
+export const getPlanetCoordKey = (position: vec3) => {
+  const { x, y, z } = getPlanetCoord(position);
+  return `${x}:${y}:${z}`;
+};
+
+export const getPlanetByPosition = (universe: Universe, position: vec3) =>
+  universe.planets[universe.planetsCoords[getPlanetCoordKey(position)]];
+
+export const addPlanet = (universe: Universe, planet: Planet) => {
+  universe.planets.push(planet);
+  universe.planetsCoords[planet.coord] = universe.planets.length - 1;
 };

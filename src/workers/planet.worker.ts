@@ -1,4 +1,5 @@
 import { queue } from "async";
+import * as ndarray from "ndarray";
 import { vec3 } from "gl-matrix";
 import { getRandomTexture } from "../textures/getRandomTexture";
 import {
@@ -6,6 +7,7 @@ import {
   BLOCK_STRING_TO_INT_TYPE,
   PLANET_SIZE,
   CHUNK_SIZE,
+  CHUNK_VOLUME,
   PLANET_BORDER
 } from "../constants";
 import { Planet, ChunkBase } from "../types";
@@ -46,13 +48,17 @@ self.addEventListener(
 );
 
 const genBlocks = () => {
-  const blocks: number[][][] = [];
-  for (let x = 0; x < CHUNK_SIZE; x += 1) {
-    blocks[x] = [];
-    for (let y = 0; y < CHUNK_SIZE; y += 1) {
-      blocks[x][y] = [];
-    }
-  }
+  const blocks = ndarray(new Uint8Array(CHUNK_VOLUME), [
+    CHUNK_SIZE,
+    CHUNK_SIZE,
+    CHUNK_SIZE
+  ]);
+
+  // for (let x = 0; x < CHUNK_SIZE; x += 1) {
+  //   for (let y = 0; y < CHUNK_SIZE; y += 1) {
+  //     blocks[x][y] = [];
+  //   }
+  // }
   // for (let x = 0; x < PLANET_SIZE * CHUNK_SIZE; x += 1) {
   //   for (let z = 0; z < PLANET_SIZE * CHUNK_SIZE; z += 1) {
   //     const topY = Math.floor(
@@ -71,7 +77,7 @@ const genBlocks = () => {
       for (let z = 0; z < CHUNK_SIZE; z += 1) {
         // if (Math.random() >= 0.49) {
         const tex = getRandomTexture();
-        blocks[x][y][z] = BLOCK_STRING_TO_INT_TYPE[tex];
+        blocks.set(x, y, z, BLOCK_STRING_TO_INT_TYPE[tex]);
         // }
       }
     }

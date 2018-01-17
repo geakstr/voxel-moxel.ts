@@ -39,7 +39,7 @@ let currentlyPressedKeys: { [key: string]: boolean } = {};
  * @param {number} aspect Aspect ratio
  * @returns {mat4} mvp
  */
-export const update = (aspect: number): mat4 => {
+export const update = (aspect: number): { mvp: mat4; position: vec3 } => {
   if (false === isPaused) {
     move();
   }
@@ -77,7 +77,12 @@ export const update = (aspect: number): mat4 => {
   mat4.lookAt(view, position, lookAt, up);
 
   // calc projection * view * model matrix  (mvp)
-  return mat4.multiply(mvp, projection, mat4.multiply(mvp, view, model));
+  mat4.multiply(mvp, projection, mat4.multiply(mvp, view, model));
+
+  return {
+    mvp,
+    position
+  };
 };
 
 export const pause = () => {

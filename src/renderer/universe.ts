@@ -1,17 +1,32 @@
-import { vec4 } from "gl-matrix";
-import { Universe } from "../types";
+import { vec3, vec4 } from "gl-matrix";
+import { Universe, Planet } from "../types";
+import {
+  getPlanetByPosition,
+  getPlanetCoord,
+  getPlanetCoordKey,
+  addPlanet
+} from "../creators/universe";
+import { createPlanet } from "../creators/planet";
 import { renderPlanet } from "./planet";
 
 export const renderUniverse = (
   gl: WebGL2RenderingContext,
+  position: vec3,
   frustumPlanes: vec4[],
   universe: Universe
 ) => {
-  const count = universe.planets.length;
-  for (let i = 0; i < count; i += 1) {
-    const planet = universe.planets[i];
-    // if (planet.ready) {
-    renderPlanet(gl, frustumPlanes, planet);
-    // }
+  if (typeof getPlanetByPosition(universe, position) === "undefined") {
+    const { x, y, z } = getPlanetCoord(position);
+    const coord = getPlanetCoordKey(position);
+    const newPlanet: Planet = {
+      x,
+      y,
+      z,
+      coord,
+      chunks: []
+    };
+    addPlanet(universe, newPlanet);
+    createPlanet(gl, newPlanet);
   }
+  universe.planets.forEach(planet => renderPlanet(gl, frustumPlanes, planet));
 };

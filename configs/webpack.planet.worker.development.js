@@ -19,7 +19,7 @@ module.exports = webpackMerge(commonConfig, {
     sourceMapFilename: "[name].map",
     publicPath: "/"
   },
-  devtool: "cheap-source-map",
+  devtool: "cheap-module-eval-source-map",
   plugins: [
     new webpack.NamedModulesPlugin(),
     new webpack.DefinePlugin({

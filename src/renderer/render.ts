@@ -26,11 +26,11 @@ export const render = (
     }
 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    const mvp = camera.update(canvas.width / canvas.height);
+    const { mvp, position } = camera.update(canvas.width / canvas.height);
     const frustumPlanes = frustum.update(mvp);
     gl.uniformMatrix4fv(getUniform(SHADER_UNIFORM.MVP_MATRIX), false, mvp);
 
-    renderUniverse(gl, frustumPlanes, universe);
+    renderUniverse(gl, position, frustumPlanes, universe);
     requestAnimationFrame(onAnimationFrame);
   };
   requestAnimationFrame(onAnimationFrame);
