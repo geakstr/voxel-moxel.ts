@@ -9,7 +9,7 @@ import {
 } from "../constants";
 import { createBlock } from "./block";
 
-export const createChunkBase = (
+export const fillChunkData = (
   blocks: ndarray,
   planetXOffset: number,
   planetYOffset: number,

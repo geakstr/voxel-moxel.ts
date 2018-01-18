@@ -15,18 +15,10 @@ export const renderUniverse = (
   frustumPlanes: vec4[],
   universe: Universe
 ) => {
-  if (typeof getPlanetByPosition(universe, position) === "undefined") {
-    const { x, y, z } = getPlanetCoord(position);
-    const coord = getPlanetCoordKey(position);
-    const newPlanet: Planet = {
-      x,
-      y,
-      z,
-      coord,
-      chunks: []
-    };
-    addPlanet(universe, newPlanet);
-    createPlanet(gl, newPlanet);
+  if (!getPlanetByPosition(universe, position)) {
+    addPlanet(universe, createPlanet(gl, position));
   }
-  universe.planets.forEach(planet => renderPlanet(gl, frustumPlanes, planet));
+  universe.planets.forEach(planet =>
+    renderPlanet(gl, position, frustumPlanes, planet)
+  );
 };

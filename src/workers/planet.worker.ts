@@ -10,16 +10,16 @@ import {
   CHUNK_VOLUME,
   PLANET_BORDER
 } from "../constants";
-import { Planet, ChunkBase } from "../types";
-import { createChunkBase } from "../creators/chunk";
+import { Chunk } from "../types";
+import { fillChunkData } from "../creators/chunk";
 import { createBlock } from "../creators/block";
 import { prand } from "../utils/rand";
 
-const planetsQ = queue<{ reqid: number; planet: Planet; position: vec3 }, {}>(
+const planetsQ = queue<{ reqid: number; chunk: Chunk; position: vec3 }, {}>(
   (task, callback) => {
-    const { reqid, planet, position } = task;
+    const { reqid, chunk, position } = task;
 
-    genChunksBases(reqid, planet, position);
+    genChunksBases(reqid, chunk, position);
 
     callback();
   },
@@ -32,10 +32,10 @@ self.addEventListener(
     const { reqid, action, data } = e.data;
 
     switch (action) {
-      case "BUILD_PLANET": {
+      case "BUILD_CHUNKS_AROUND": {
         planetsQ.push({
           reqid,
-          planet: data.planet as Planet,
+          chunk: data.chunk as Chunk,
           position: data.position as vec3
         });
         break;
@@ -86,7 +86,7 @@ const genBlocks = () => {
 };
 
 // https://github.com/mikolalysenko/mikolalysenko.github.com/blob/gh-pages/MinecraftMeshes2/js/greedy_tri.js
-const genChunksBases = (reqid: any, planet: Planet, position: vec3) => {
+const genChunksBases = (reqid: any, chunk: Chunk, position: vec3) => {
   const currentChunkX = Math.round(position[0] / CHUNK_SIZE) - 1;
   const currentChunkY = Math.round(position[1] / CHUNK_SIZE) - 1;
   const currentChunkZ = Math.round(position[2] / CHUNK_SIZE) - 1;
@@ -95,11 +95,9 @@ const genChunksBases = (reqid: any, planet: Planet, position: vec3) => {
     for (let y = currentChunkY - 2; y < currentChunkY; y += 1) {
       for (let z = currentChunkZ - 2; z <= currentChunkZ + 2; z += 1) {
         const blocks = genBlocks();
-        const chunkBase = createChunkBase(
+        const chunkBase = fillChunkData(
           blocks,
-          planet.x,
-          planet.y,
-          planet.z,
+          chunk,
           x * CHUNK_SIZE,
           y * CHUNK_SIZE,
           z * CHUNK_SIZE
