@@ -1,5 +1,4 @@
 import * as ndarray from "ndarray";
-import { ChunkBase } from "../types";
 import {
   ATLAS,
   CHUNK_SIZE,
@@ -7,9 +6,11 @@ import {
   BLOCK_INT_TO_STRING_TYPE,
   SIDE
 } from "../constants";
+import { Chunk } from "../types";
 import { createBlock } from "./block";
 
 export const fillChunkData = (
+  chunk: Chunk,
   blocks: ndarray,
   planetXOffset: number,
   planetYOffset: number,
@@ -17,7 +18,7 @@ export const fillChunkData = (
   chunkXOffset: number,
   chunkYOffset: number,
   chunkZOffset: number
-): ChunkBase => {
+): Chunk => {
   const data = [];
   for (let blockX = 0; blockX < CHUNK_SIZE; blockX += 1) {
     for (let blockY = 0; blockY < CHUNK_SIZE; blockY += 1) {
@@ -38,6 +39,7 @@ export const fillChunkData = (
     }
   }
   return {
+    ...chunk,
     blocks,
     x: chunkXOffset + planetXOffset,
     y: chunkYOffset + planetYOffset,

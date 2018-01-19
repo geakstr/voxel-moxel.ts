@@ -36,7 +36,7 @@ const chunksQ = queue<
   {}
 >((task, callback) => {
   const { gl, planet, chunk } = task;
-  addChunk(planet, {
+  putChunk(planet, chunk.coord, {
     ...chunk,
     vao: createVertexArray(gl, chunk.data!, chunk.indicesCount)
   });
@@ -61,6 +61,7 @@ export const createChunk = (
     vao: null,
     data: null
   };
+  addChunk(planet, chunk);
 
   const reqid = Math.random();
   worker.addEventListener(
@@ -91,6 +92,7 @@ export const createChunk = (
     action: "BUILD_CHUNKS_AROUND",
     data: {
       chunk,
+      planet,
       position
     }
   });

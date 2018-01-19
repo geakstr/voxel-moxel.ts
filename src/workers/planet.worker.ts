@@ -10,21 +10,21 @@ import {
   CHUNK_VOLUME,
   PLANET_BORDER
 } from "../constants";
-import { Chunk } from "../types";
+import { Chunk, Planet } from "../types";
 import { fillChunkData } from "../creators/chunk";
 import { createBlock } from "../creators/block";
 import { prand } from "../utils/rand";
 
-const planetsQ = queue<{ reqid: number; chunk: Chunk; position: vec3 }, {}>(
-  (task, callback) => {
-    const { reqid, chunk, position } = task;
+const planetsQ = queue<
+  { reqid: number; planet: Planet; chunk: Chunk; position: vec3 },
+  {}
+>((task, callback) => {
+  const { reqid, planet, chunk, position } = task;
 
-    genChunksBases(reqid, chunk, position);
+  genChunksBases(reqid, planet, chunk, position);
 
-    callback();
-  },
-  1
-);
+  callback();
+}, 1);
 
 self.addEventListener(
   "message",
@@ -35,6 +35,7 @@ self.addEventListener(
       case "BUILD_CHUNKS_AROUND": {
         planetsQ.push({
           reqid,
+          planet: data.planet as Planet,
           chunk: data.chunk as Chunk,
           position: data.position as vec3
         });
@@ -86,7 +87,12 @@ const genBlocks = () => {
 };
 
 // https://github.com/mikolalysenko/mikolalysenko.github.com/blob/gh-pages/MinecraftMeshes2/js/greedy_tri.js
-const genChunksBases = (reqid: any, chunk: Chunk, position: vec3) => {
+const genChunksBases = (
+  reqid: any,
+  planet: Planet,
+  chunk: Chunk,
+  position: vec3
+) => {
   const currentChunkX = Math.round(position[0] / CHUNK_SIZE) - 1;
   const currentChunkY = Math.round(position[1] / CHUNK_SIZE) - 1;
   const currentChunkZ = Math.round(position[2] / CHUNK_SIZE) - 1;
@@ -96,8 +102,11 @@ const genChunksBases = (reqid: any, chunk: Chunk, position: vec3) => {
       for (let z = currentChunkZ - 2; z <= currentChunkZ + 2; z += 1) {
         const blocks = genBlocks();
         const chunkBase = fillChunkData(
-          blocks,
           chunk,
+          blocks,
+          planet.x,
+          planet.y,
+          planet.z,
           x * CHUNK_SIZE,
           y * CHUNK_SIZE,
           z * CHUNK_SIZE
