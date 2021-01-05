@@ -1,11 +1,10 @@
 import { vec3 } from "gl-matrix";
-import { UNIVERSE_SIZE, PLANET_SIZE, CHUNK_SIZE } from "../constants";
+import { CHUNK_SIZE, PLANET_SIZE } from "../constants";
 import { Planet, Universe } from "../types";
-import { createPlanet } from "./planet";
 
-export const createUniverse = (gl: WebGL2RenderingContext): Universe => ({
+export const createUniverse = (): Universe => ({
   planets: [],
-  planetsCoords: {}
+  planetsCoords: {},
 });
 
 export const getPlanetCoord = (position: vec3) => {

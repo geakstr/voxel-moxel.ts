@@ -1,11 +1,10 @@
-import { KEYBOARD } from "./constants";
+import { createUniverse } from "./creators/universe";
+import "./index.module.scss";
+import * as camera from "./renderer/camera";
+import { createGl } from "./renderer/gl";
+import { render } from "./renderer/render";
 import { createShader } from "./shaders";
 import { loadTextures } from "./textures";
-import { createGl } from "./renderer/gl";
-import * as camera from "./renderer/camera";
-import { render } from "./renderer/render";
-import { createUniverse } from "./creators/universe";
-import "./index.scss";
 
 window.addEventListener("load", () => {
   const canvas = document.querySelector("#app") as HTMLCanvasElement;
@@ -16,7 +15,7 @@ window.addEventListener("load", () => {
 
   document.addEventListener(
     "pointerlockchange",
-    (event: PointerEvent) => {
+    () => {
       if (document.pointerLockElement === canvas) {
         camera.resume();
       } else {
@@ -26,28 +25,11 @@ window.addEventListener("load", () => {
     false
   );
 
-  document.addEventListener(
-    "keydown",
-    (event: KeyboardEvent) => {
-      if (event.keyCode === KEYBOARD.ENTER) {
-        const element = canvas as any;
-        if (element.requestFullScreen) {
-          element.requestFullScreen();
-        } else if (element.webkitRequestFullScreen) {
-          element.webkitRequestFullScreen();
-        } else if (element.mozRequestFullScreen) {
-          element.mozRequestFullScreen();
-        }
-      }
-    },
-    false
-  );
-
   async function run() {
     const gl = createGl(canvas);
-    const shader = createShader(gl);
+    createShader(gl);
     loadTextures(gl);
-    const universe = createUniverse(gl);
-    render(gl, canvas, shader, universe);
+    const universe = createUniverse();
+    render(gl, canvas, universe);
   }
 });

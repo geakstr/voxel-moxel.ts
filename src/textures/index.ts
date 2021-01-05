@@ -1,5 +1,4 @@
-import { ATLAS, TEXTURE, TEXTURE_SRC } from "../constants";
-import { getAtlasCoord } from "./atlas";
+import { TEXTURE, TEXTURE_SRC } from "../constants";
 
 const texturesMap: { [key: string]: WebGLTextureExtended } = {};
 
@@ -49,5 +48,7 @@ const handleLoadedTexture = (
 };
 
 class WebGLTextureExtended extends WebGLTexture {
-  public image: HTMLImageElement;
+  constructor(public image: HTMLImageElement) {
+    super();
+  }
 }

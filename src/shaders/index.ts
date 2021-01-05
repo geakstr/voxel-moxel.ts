@@ -1,8 +1,8 @@
-import { SHADER_ATTR, SHADER_UNIFORM, SHADER_IN_OUT } from "./types";
-import { VERTEX_SHADER } from "./vertex.shader";
 import { FRAGMENT_SHADER } from "./fragment.shader";
+import { SHADER_ATTR, SHADER_UNIFORM } from "./types";
+import { VERTEX_SHADER } from "./vertex.shader";
 
-export { SHADER_ATTR, SHADER_UNIFORM, SHADER_IN_OUT } from "./types";
+export { SHADER_ATTR, SHADER_IN_OUT, SHADER_UNIFORM } from "./types";
 
 export const getUniform = (name: SHADER_UNIFORM) => uniforms[name];
 export const getAttr = (name: SHADER_ATTR) => attrs[name];
@@ -12,7 +12,7 @@ export const createShader = (gl: WebGL2RenderingContext) => {
   const vertexShader = compileShader(gl, gl.VERTEX_SHADER, VERTEX_SHADER);
 
   const shader = gl.createProgram();
-  if (!shader) {
+  if (!shader || !vertexShader || !fragmentShader) {
     throw new Error("Can't create shader");
   }
 
@@ -65,6 +65,7 @@ const compileShader = (
   shaderBody: string
 ) => {
   const shader = gl.createShader(shaderType);
+  if (!shader) return null;
   gl.shaderSource(shader, shaderBody);
   gl.compileShader(shader);
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {

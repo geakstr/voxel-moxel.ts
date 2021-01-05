@@ -12,7 +12,6 @@ let lastTime = performance.now();
 export const render = (
   gl: WebGL2RenderingContext,
   canvas: HTMLCanvasElement,
-  shaders: WebGLProgram,
   universe: Universe
 ) => {
   const onAnimationFrame = (now: number) => {

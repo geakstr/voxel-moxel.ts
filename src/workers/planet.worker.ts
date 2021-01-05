@@ -1,19 +1,14 @@
 import { queue } from "async";
-import * as ndarray from "ndarray";
 import { vec3 } from "gl-matrix";
-import { getRandomTexture } from "../textures/getRandomTexture";
+import ndarray from "ndarray";
 import {
-  ATLAS,
   BLOCK_STRING_TO_INT_TYPE,
-  PLANET_SIZE,
   CHUNK_SIZE,
   CHUNK_VOLUME,
-  PLANET_BORDER
 } from "../constants";
-import { Planet, ChunkBase } from "../types";
 import { createChunkBase } from "../creators/chunk";
-import { createBlock } from "../creators/block";
-import { prand } from "../utils/rand";
+import { getRandomTexture } from "../textures/getRandomTexture";
+import { Planet } from "../types";
 
 const planetsQ = queue<{ reqid: number; planet: Planet; position: vec3 }, {}>(
   (task, callback) => {
@@ -28,7 +23,7 @@ const planetsQ = queue<{ reqid: number; planet: Planet; position: vec3 }, {}>(
 
 self.addEventListener(
   "message",
-  e => {
+  (e) => {
     const { reqid, action, data } = e.data;
 
     switch (action) {
@@ -36,7 +31,7 @@ self.addEventListener(
         planetsQ.push({
           reqid,
           planet: data.planet as Planet,
-          position: data.position as vec3
+          position: data.position as vec3,
         });
         break;
       }
@@ -51,7 +46,7 @@ const genBlocks = () => {
   const blocks = ndarray(new Uint8Array(CHUNK_VOLUME), [
     CHUNK_SIZE,
     CHUNK_SIZE,
-    CHUNK_SIZE
+    CHUNK_SIZE,
   ]);
 
   // for (let x = 0; x < CHUNK_SIZE; x += 1) {
@@ -107,7 +102,7 @@ const genChunksBases = (reqid: any, planet: Planet, position: vec3) => {
         (self.postMessage as any)({
           resid: reqid,
           action: "BUILD_CHUNK",
-          data: chunkBase
+          data: chunkBase,
         });
       }
     }

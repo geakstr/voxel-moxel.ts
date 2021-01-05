@@ -1,12 +1,6 @@
-import * as ndarray from "ndarray";
+import ndarray from "ndarray";
+import { CHUNK_SIZE, SIDE } from "../constants";
 import { ChunkBase } from "../types";
-import {
-  ATLAS,
-  CHUNK_SIZE,
-  PLANET_BORDER,
-  BLOCK_INT_TO_STRING_TYPE,
-  SIDE
-} from "../constants";
 import { createBlock } from "./block";
 
 export const createChunkBase = (
@@ -42,8 +36,8 @@ export const createChunkBase = (
     x: chunkXOffset + planetXOffset,
     y: chunkYOffset + planetYOffset,
     z: chunkZOffset + planetZOffset,
-    indicesCount: data.length / 5 * 3 / 2,
-    data: new Float32Array(data)
+    indicesCount: ((data.length / 5) * 3) / 2,
+    data: new Float32Array(data),
   };
 };
 

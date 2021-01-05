@@ -1,9 +1,15 @@
 import { queue } from "async";
-import { Planet, Chunk, ChunkBase } from "../types";
 import { position } from "../renderer/camera";
+import { ChunkBase, Planet } from "../types";
 import { createVertexArray } from "./vao";
 
-const worker = new Worker("/workers/planet.worker.js");
+const worker = new Worker(
+  new URL("../workers/planet.worker.js", import.meta.url),
+  {
+    name: "planet-worker",
+    type: "module",
+  }
+);
 
 const chunksQ = queue<
   { gl: WebGL2RenderingContext; planet: Planet; chunkBase: ChunkBase },
@@ -16,7 +22,7 @@ const chunksQ = queue<
     z: chunkBase.z,
     blocks: chunkBase.blocks,
     indicesCount: chunkBase.indicesCount,
-    vao: createVertexArray(gl, chunkBase.data, chunkBase.indicesCount)
+    vao: createVertexArray(gl, chunkBase.data, chunkBase.indicesCount),
   });
   callback();
 }, 1);
@@ -28,7 +34,7 @@ export const createPlanet = (
   const reqid = Math.random();
   worker.addEventListener(
     "message",
-    e => {
+    (e) => {
       const { resid, action, data } = e.data;
       switch (action) {
         case "BUILD_CHUNK": {
@@ -36,7 +42,7 @@ export const createPlanet = (
             chunksQ.push({
               gl,
               planet,
-              chunkBase: data as ChunkBase
+              chunkBase: data as ChunkBase,
             });
           }
           break;
@@ -53,8 +59,8 @@ export const createPlanet = (
     action: "BUILD_PLANET",
     data: {
       planet,
-      position
-    }
+      position,
+    },
   });
 
   return planet;

@@ -1,4 +1,4 @@
-import * as ndarray from "ndarray";
+import ndarray from "ndarray";
 
 export interface Universe {
   readonly planets: Planet[];
